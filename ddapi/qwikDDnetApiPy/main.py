@@ -2,7 +2,7 @@ import aiohttp
 import orjson
 from aiohttp import ClientSession
 
-from dataclass import Player
+from ddapi.dataclass import Player
 
 sum_to_encoding = {"␣": "%20", "!": "%21", "\"": "%22", "#": "%23",
                    "$": "%24", "%": "%25", "&": "%26", "\'": "%27",

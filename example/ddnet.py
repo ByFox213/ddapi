@@ -1,7 +1,5 @@
 import asyncio
-
-from DDnetApiPy import DDnetApi
-from dataclass import DDPlayer
+from ddapi import DDnetApi, DDPlayer
 
 
 async def main():

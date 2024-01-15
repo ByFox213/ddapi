@@ -1,7 +1,5 @@
 import asyncio
-
-from dataclass import Player
-from qwikDDnetApiPy import DDraceAPI
+from ddapi import Player, DDraceAPI
 
 
 async def main():

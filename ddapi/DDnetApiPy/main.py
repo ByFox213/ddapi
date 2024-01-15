@@ -3,7 +3,7 @@ import orjson
 from aiohttp import ClientSession
 from typing import Any
 
-from dataclass import DDPlayer
+from ddapi.dataclass import DDPlayer
 
 sum_to_encoding = {"␣": "%20", "!": "%21", "\"": "%22", "#": "%23",
                    "$": "%24", "%": "%25", "&": "%26", "\'": "%27",
