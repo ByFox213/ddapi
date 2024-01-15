@@ -69,6 +69,7 @@ class DDPlayer(BaseModel):
     points_last_month: Optional[DRank] = Field(default=None)
     points_last_week: Optional[DRank] = Field(default=None)
     first_finish: Optional[FirstFinish] = Field(default=None)
+    last_finishes: Optional[list[LastFinish]] = Field(default=None)
     favorite_partners: Optional[list[FavorPart]] = Field(default=None)
     types: Optional[DDType] = Field(default=None)
     activity: Optional[list[DActiov]] = Field(default=None)
