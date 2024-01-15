@@ -1,35 +1,9 @@
 import aiohttp
 import orjson
 from aiohttp import ClientSession
-
-from ddapi.dataclass import Player
-
-sum_to_encoding = {"␣": "%20", "!": "%21", "\"": "%22", "#": "%23",
-                   "$": "%24", "%": "%25", "&": "%26", "\'": "%27",
-                   "(": "%28", ")": "%29", "*": "%2A", "+": "%2B",
-                   ",": "%2C", "/": "%2F", ":": "%3A", ";": "%3B",
-                   "=": "%3D", "?": "%3F", "@": "%40", "[": "%5B",
-                   "]": "%5D", "-": "%2D", ".": "%2E", "<": "%3C",
-                   ">": "%3E", "\\": "%5C", "^": "%5E", "_": "%5F",
-                   "`": "%60", "{": "%7B", "|": "%7C", "}": "%7D",
-                   "~": "%7E"}
-
-
-def username_encode(username: str) -> str:
-    """Decodes the line so that http gives out information about the player.
-    :param username:
-        :type: str
-    :return:
-        :type: str
-    """
-    result: str = ""
-    for i in username:
-        add: str = sum_to_encoding.get(i)
-        if add is not None:
-            result += add
-        else:
-            result += i
-    return result
+from ..dataclass import Player
+from ..misc import username_encode
+from ..errors import ExceptConnection
 
 
 class DDraceAPI:
@@ -43,14 +17,17 @@ class DDraceAPI:
 
     async def _send(self, nick: str) -> dict | None:
         await self._ch_start()
-        async with self.session.get(self.url.format(username_encode(nick))) as req:
-            if req.status == 200:
-                usr = await req.text()
-                if usr == '{}' or usr is None:
-                    return
-                del usr
-                return await req.json(loads=orjson.loads)
-            return
+        try:
+            async with self.session.get(self.url.format(username_encode(nick))) as req:
+                if req.status == 200:
+                    usr = await req.text()
+                    if usr == '{}' or usr is None:
+                        return
+                    del usr
+                    return await req.json(loads=orjson.loads)
+                return
+        except Exception as ex:
+            raise ExceptConnection(f"This hosting may not be available at the moment: {ex}")
 
     async def player(self, nickname) -> Player | None:
         dat = await self._send(nickname)
