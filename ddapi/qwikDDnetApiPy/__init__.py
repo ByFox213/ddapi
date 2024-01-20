@@ -1,1 +1,1 @@
-from .main import DDraceAPI
+from .main import QwikAPI

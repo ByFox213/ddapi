@@ -1,7 +1,6 @@
 import aiohttp
 import orjson
 from aiohttp import ClientSession
-from typing import Any
 from ..dataclass import DDPlayer
 from ..misc import username_encode
 
@@ -10,6 +9,10 @@ class DDnetApi:
     def __init__(self, session: ClientSession = None):
         self.session = session
         self.url = "https://ddstats.qwik.space/player/json?player={0}"
+
+    @property
+    def closed(self):
+        return self.session.closed is None or self.session.closed
 
     async def _ch_start(self) -> None:
         if self.session is None:
@@ -29,8 +32,17 @@ class DDnetApi:
     async def close(self) -> None:
         return await self.session.close()
 
-    async def player(self, player: str) -> DDPlayer | bool:
-        return DDPlayer(**await self._send(f"https://ddnet.org/players/?json2={username_encode(player)}"))
+    async def player(self, player: str) -> DDPlayer | None:
+        dat = await self._send(f"https://ddnet.org/players/?json2={username_encode(player)}")
+        if dat is None:
+            return
+        return DDPlayer(**dat)
 
-    async def master(self) -> Any | dict:
+    async def dict_player(self, player: str) -> dict | None:
+        dat = await self._send(f"https://ddnet.org/players/?json2={username_encode(player)}")
+        if dat is None:
+            return
+        return dat
+
+    async def master(self) -> dict | None:
         return await self._send("https://master1.ddnet.org/ddnet/15/servers.json")

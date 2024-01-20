@@ -1,17 +1,29 @@
-[tool.poetry]
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "ddapi"
 version = "0.1.0"
-description = ""
-authors = ["ByFox <byfox213@gmail.com>"]
+description = "ddapi"
 readme = "README.md"
+authors = [{ name = "ByFox" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["feed", "reader", "tutorial"]
+dependencies = [
+    "pydantic",
+    "aiohttp",
+    'orjson'
+]
+requires-python = ">=3.8"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-pydantic = "^2.5.3"
-aiohttp = "^3.9.1"
-orjson = "*"
+[project.optional-dependencies]
+dev = ["pydantic", "aiohttp", "orjson", "pip-tools", "pytest"]
 
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[project.urls]
+Homepage = "https://github.com/ByFox213/ddapi"
