@@ -2,7 +2,7 @@ ddapi is an api from the ddnet and qwik website
 ## Installation
 
 ```bash
-  pip install .
+  pip install ddapi
 ```
     
 ## Usage/Examples
