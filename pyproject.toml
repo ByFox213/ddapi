@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ddapi"
-version = "0.1.0"
+version = "0.1.2"
 description = "ddapi"
 readme = "README.md"
 authors = [{ name = "ByFox" }]
@@ -17,8 +17,7 @@ classifiers = [
 keywords = ["feed", "reader", "tutorial"]
 dependencies = [
     "pydantic",
-    "aiohttp",
-    'orjson'
+    "aiohttp"
 ]
 requires-python = ">=3.8"
 
