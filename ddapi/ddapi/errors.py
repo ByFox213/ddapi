@@ -1,2 +1,0 @@
-class ExceptConnection(Exception):
-    pass

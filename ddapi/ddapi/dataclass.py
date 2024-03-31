@@ -1,5 +1,8 @@
+# pylint: disable-all
+from collections import Counter
+from typing import Optional, Union, Any
+
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 # ddnet
@@ -62,6 +65,7 @@ class DActiov(BaseModel):
 
 
 class DDPlayer(BaseModel):
+    emoji: Any = Field(default=None)
     player: Optional[str] = Field(default=None)
     points: Optional[DPoints] = Field(default=None)
     team_rank: Optional[DRank] = Field(default=None)
@@ -84,7 +88,7 @@ class Skin(BaseModel):
 
 
 class PData(BaseModel):
-    rank: Optional[str] = Field(default=None)
+    rank: Optional[int] = Field(default=None)
     points: Optional[int] = Field(default=None)
 
 
@@ -249,3 +253,48 @@ class Player(BaseModel):
                                                                    validation_alias="AmountOfTop10Placements")
     rank1sPartners: Optional[list[Rank1sPartners]] = Field(default=None)
     recentTop10s: Optional[list[RecentTop10s]] = Field(default=None)
+
+
+class Client(BaseModel):
+    name: str = Field(default='')
+    clan: str = Field(default='')
+    country: int = Field(default=-1)
+    score: int = Field(default=-9999)
+    is_player: bool = Field(default=None)
+    skin: dict = Field(default=None)
+    afk: bool = Field(default=None)
+    team: int = Field(default=0)
+
+
+class Info(BaseModel):
+    max_clients: int = Field(default=0)
+    max_players: int = Field(default=0)
+    passworded: bool = Field(default=None)
+    game_type: str = Field(default=None)
+    name: str = Field(default=None)
+    map: dict = Field(default=None)
+    version: str = Field(default=None)
+    clients: list[Client] = Field(default=None)
+
+
+class Server(BaseModel):
+    addresses: Union[list, str] = Field(default=None)
+    location: str = Field(default=None)
+    info: Info = Field(default=None)
+
+
+class Master(BaseModel):
+    servers: list[Server]
+
+    async def get_info(self):
+        for i in self.servers:
+            yield i.info
+
+    async def get_clients(self):
+        for i in self.servers:
+            yield i.info.clients
+
+    def get_clans(self, limit: int = 50):
+        dat = Counter(client.clan for server in self.servers for client in server.info.clients)
+        del dat['']
+        return sorted(dat.items(), key=lambda x: x[1], reverse=True)[:limit]

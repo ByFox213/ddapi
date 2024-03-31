@@ -8,7 +8,7 @@ async def main():
     user: DDPlayer = await obj.player(nickname)
     if user is None:
         return "Player not found"
-    print(f"{user.player}: {user.hours_played_past_365_days}")
+    print(f"{user.player}: {user.points.total}")
     await obj.close()  # Closing client Not necessary
     assert isinstance(user, DDPlayer)
 
