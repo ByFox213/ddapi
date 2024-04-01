@@ -4,6 +4,10 @@ ddapi is an api from the ddnet and qwik website
 ```bash
   pip install ddapi
 ```
+or
+```bash
+  pip install .
+```
     
 ## Usage/Examples
 
