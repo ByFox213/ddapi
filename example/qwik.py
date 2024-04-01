@@ -1,9 +1,9 @@
 import asyncio
-from ddapi import Player, QwikAPI
+from ddapi import Player, DDraceAPI
 
 
 async def main():
-    obj = QwikAPI()
+    obj = DDraceAPI()
     nickname = "ByFox"
     user = await obj.player(nickname)
     if user is None:

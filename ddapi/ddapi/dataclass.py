@@ -294,6 +294,10 @@ class Master(BaseModel):
         for i in self.servers:
             yield i.info.clients
 
+    @property
+    def count(self) -> int:
+        return len(self.servers)
+
     def get_clans(self, limit: int = 50):
         dat = Counter(client.clan for server in self.servers for client in server.info.clients)
         del dat['']
