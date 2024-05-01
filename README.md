@@ -6,7 +6,7 @@ ddapi is an api from the ddnet and qwik website
 ```
 or
 ```bash
-  pip install .
+  pip install git+https://github.com/ByFox213/ddapi
 ```
     
 ## Usage/Examples
