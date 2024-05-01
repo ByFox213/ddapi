@@ -300,9 +300,13 @@ class Master(BaseModel):
     def get_count(self) -> int:
         return len(self.servers)
 
-    def get_clans(self, limit: int = 50):
+    def get_clans(self, limit: int = 50, rm=None):
+        if rm is None:
+            rm = ["DD-Persian"]
         dat = Counter(client.clan for server in self.servers for client in server.info.clients)
         del dat['']
+        for i in rm:
+            del dat[i]
         return sorted(dat.items(), key=lambda x: x[1], reverse=True)[:limit]
 
     def get_count_servers(self, limit: int = 10):
