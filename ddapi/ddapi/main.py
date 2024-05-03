@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from typing import Union
 from json import JSONDecoder
 from urllib.parse import quote
@@ -11,13 +12,13 @@ from .dataclass import DDPlayer, Master, Player, Query, STPlayer, STServers, STS
 
 reg_server = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
 
-
 __all__ = (
     "utc_times",
     "DDnetApi",
     "QwikAPI",
     "StatusAPI"
 )
+
 
 def utc_times(timestamp: int | float) -> datetime:
     return datetime.utcfromtimestamp(timestamp)
