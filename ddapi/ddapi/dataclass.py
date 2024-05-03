@@ -29,6 +29,14 @@ class DDRanks(BaseModel):
     country: Optional[str] = Field(default=None)
 
 
+class DDTMRanks(BaseModel):
+    rank: Optional[int] = Field(default=None)
+    players: Union[str, list[str]] = Field(default=None)
+    time: Optional[float] = Field(default=None)
+    timestamp: Optional[int] = Field(default=None)
+    country: Optional[str] = Field(default=None)
+
+
 class DMap(BaseModel):
     name: Optional[str] = Field(default=None)
     website: Optional[str] = Field(default=None)
@@ -48,7 +56,7 @@ class DMap(BaseModel):
     width: Optional[int] = Field(default=None)
     height: Optional[int] = Field(default=None)
     tiles: Optional[list] = Field(default=None)
-    team_ranks: Optional[list[DDRanks]] = Field(default=None)
+    team_ranks: Optional[list[DDTMRanks]] = Field(default=None)
     ranks: Optional[list[DDRanks]] = Field(default=None)
     max_finishes: Optional[list[MaxFinishes]] = Field(default=None)
 
