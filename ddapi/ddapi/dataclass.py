@@ -12,6 +12,47 @@ class DPoints(BaseModel):
     rank: Optional[int] = Field(default=None)
 
 
+class MaxFinishes(BaseModel):
+    rank: Optional[int] = Field(default=None)
+    player: Optional[str] = Field(default=None)
+    num: Optional[int] = Field(default=None)
+    time: Optional[float] = Field(default=None)
+    min_timestamp: Optional[int] = Field(default=None)
+    max_timestamp: Optional[int] = Field(default=None)
+
+
+class DDRanks(BaseModel):
+    rank: Optional[int] = Field(default=None)
+    player: Union[str, list[str]] = Field(default=None)
+    time: Optional[float] = Field(default=None)
+    timestamp: Optional[int] = Field(default=None)
+    country: Optional[str] = Field(default=None)
+
+
+class DMap(BaseModel):
+    name: Optional[str] = Field(default=None)
+    website: Optional[str] = Field(default=None)
+    thumbnail: Optional[str] = Field(default=None)
+    web_preview: Optional[str] = Field(default=None)
+    type: Optional[str] = Field(default=None)
+    points: Optional[int] = Field(default=None)
+    difficulty: Optional[int] = Field(default=None)
+    mapper: Optional[str] = Field(default=None)
+    release: Optional[int] = Field(default=None)
+    median_time: Optional[float] = Field(default=None)
+    first_finish: Optional[int] = Field(default=None)
+    last_finish: Optional[int] = Field(default=None)
+    finishes: Optional[int] = Field(default=None)
+    finishers: Optional[int] = Field(default=None)
+    biggest_team: Optional[int] = Field(default=None)
+    width: Optional[int] = Field(default=None)
+    height: Optional[int] = Field(default=None)
+    tiles: Optional[list] = Field(default=None)
+    team_ranks: Optional[list[DDRanks]] = Field(default=None)
+    ranks: Optional[list[DDRanks]] = Field(default=None)
+    max_finishes: Optional[list[MaxFinishes]] = Field(default=None)
+
+
 class DRank(BaseModel):
     points: Optional[int] = Field(default=None)
     rank: Optional[int] = Field(default=None)

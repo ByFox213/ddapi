@@ -7,9 +7,20 @@ import aiohttp
 from aiohttp import ClientSession, ClientConnectorError
 from aiohttp.typedefs import DEFAULT_JSON_DECODER
 from .dataclass import DDPlayer, Master, Player, Query, STPlayer, STServers, STServer, STClients, STClans, STGameTypes, \
-    STMaps, STVersions, STMastersStats, STBans
+    STMaps, STVersions, STMastersStats, STBans, DMap
 
 reg_server = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
+
+
+__all__ = (
+    "utc_times",
+    "DDnetApi",
+    "QwikAPI",
+    "StatusAPI"
+)
+
+def utc_times(timestamp: int | float) -> datetime:
+    return datetime.utcfromtimestamp(timestamp)
 
 
 class API:
@@ -68,6 +79,12 @@ class DDnetApi(API):
         if dat is None:
             return
         return Master(**dat)
+
+    async def map(self, map_name: str) -> Union[DMap, None]:
+        dat = await self._send(f"https://ddnet.org/maps/?json={quote(map_name)}")
+        if dat is None:
+            return
+        return DMap(**dat)
 
 
 class QwikAPI(API):

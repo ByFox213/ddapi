@@ -7,6 +7,7 @@ async def main():
     nickname = "ByFox"
     user = await obj.player(nickname)
     if user is None:
+        await obj.close()
         return "Player not found"
     print(user)
     await obj.close()  # Closing client Not necessary
