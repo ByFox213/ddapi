@@ -53,3 +53,5 @@ async def main():
 
 asyncio.run(main())
 ```
+
+[other examples](https://github.com/ByFox213/ddapi/tree/main/example)

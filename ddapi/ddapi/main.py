@@ -1,14 +1,11 @@
 import re
 from datetime import datetime
 from typing import Union
-from json import JSONDecoder
 from urllib.parse import quote
 
-import aiohttp
-from aiohttp import ClientSession, ClientConnectorError
-from aiohttp.typedefs import DEFAULT_JSON_DECODER
 from .dataclass import DDPlayer, Master, Player, Query, STPlayer, STServers, STServer, STClients, STClans, STGameTypes, \
-    STMaps, STVersions, STMastersStats, STBans, DMap
+    STMaps, STVersions, STMastersStats, STBans, DMap, DDStatsSql
+from .deflt import API
 
 reg_server = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
 
@@ -16,7 +13,8 @@ __all__ = (
     "utc_times",
     "DDnetApi",
     "QwikAPI",
-    "StatusAPI"
+    "StatusAPI",
+    "DDstats"
 )
 
 
@@ -24,145 +22,97 @@ def utc_times(timestamp: int | float) -> datetime:
     return datetime.utcfromtimestamp(timestamp)
 
 
-class API:
-    def __init__(self,
-                 session: ClientSession = None,
-                 ex: bool = False,
-                 json_loads: JSONDecoder = DEFAULT_JSON_DECODER):
-        self.session = session
-        self.json_loads = json_loads
-        self.ex = ex
-        self.url = "https://ddstats.qwik.space/player/json?player={0}"
+class DDstats(API):
+    @staticmethod
+    def powered() -> str:
+        return 'ddstats.org'
 
-    def __del__(self):
-        self.session = None
+    async def _rt(self, url: str):
+        return await self._generate(url, DDStatsSql)
 
-    @property
-    def closed(self):
-        return self.session.closed is None or self.session.closed
+    async def next(self, dd: DDStatsSql):
+        return await self._rt(dd.next_url)
 
-    async def _send(self, url: str) -> Union[dict, None]:
-        if self.session is None:
-            self.session = aiohttp.ClientSession()
-        try:
-            async with self.session.get(url) as req:
-                if req.status == 200:
-                    usr = await req.text()
-                    if usr == '{}' or usr is None:
-                        return
-                    del usr
-                    return await req.json(loads=self.json_loads)
-        except ClientConnectorError:
-            if self.ex:
-                raise ClientConnectorError
-            return
+    async def sql(self, sql: str):
+        return await self._rt(f"https://db.ddstats.org/ddnet-7b306cf?sql={quote(sql)}")
 
-    async def close(self) -> None:
-        return await self.session.close()
+    async def get_map(self, map_name: str, end: str = "%"):
+        return await self.sql(f"select rowid, Map, Server, Points, Stars, Mapper, Timestamp from maps where Map like \'{map_name}{end}\'")
+
+    async def mapinfo(self):
+        return await self._rt("https://db.ddstats.org/ddnet-7b306cf/mapinfo.json")
+
+    async def teamrace(self):
+        return await self._rt("https://db.ddstats.org/ddnet-7b306cf/teamrace.json")
+
+    async def race(self):
+        return await self._rt("https://db.ddstats.org/ddnet-7b306cf/race.json")
+
+    async def maps(self):
+        return await self._rt(f"https://db.ddstats.org/ddnet-7b306cf/maps.json")
 
 
 class DDnetApi(API):
+    @staticmethod
+    def powered() -> str:
+        return 'ddnet.org'
+
     async def player(self, player: str) -> Union[DDPlayer, None]:
-        dat = await self._send(f"https://ddnet.org/players/?json2={quote(player)}")
-        if dat is None:
-            return
-        return DDPlayer(**dat)
+        return await self._generate(f"https://ddnet.org/players/?json2={quote(player)}", DDPlayer)
 
     async def query(self, player: str) -> Union[Query, None]:
-        dat = await self._send(f"https://ddnet.org/players/?query={quote(player)}")
-        if dat is None:
-            return
-        dat = {'data': dat}
-        return Query(**dat)
+        return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query)
 
     async def master(self) -> Union[Master, None]:
-        dat = await self._send("https://master1.ddnet.org/ddnet/15/servers.json")
-        if dat is None:
-            return
-        return Master(**dat)
+        return await self._generate("https://master1.ddnet.org/ddnet/15/servers.json", Master)
 
     async def map(self, map_name: str) -> Union[DMap, None]:
-        dat = await self._send(f"https://ddnet.org/maps/?json={quote(map_name)}")
-        if dat is None:
-            return
-        return DMap(**dat)
+        return await self._generate(f"https://ddnet.org/maps/?json={quote(map_name)}", DMap)
 
 
 class QwikAPI(API):
+    @staticmethod
+    def powered() -> str:
+        return 'ddstats.qwik.space'
+
     async def player(self, nickname) -> Union[Player, None]:
-        dat = await self._send(f"https://ddstats.qwik.space/player/json?player={quote(nickname)}")
-        if not dat:
-            return
-        return Player(**dat)
+        return await self._generate(f"https://ddstats.qwik.space/player/json?player={quote(nickname)}", Player)
 
 
 class StatusAPI(API):
-    async def players(self) -> Union[STClients, None]:
-        dat = await self._send("https://api.status.tw/player/list")
-        if not dat:
-            return
-        dat = {"players": dat}
-        return STClients(**dat)
+    @staticmethod
+    def powered() -> str:
+        return 'status.tw'
+
 
     async def player(self, nickname) -> Union[STPlayer, None]:
-        dat = await self._send(f"https://api.status.tw/player/details/{quote(nickname)}")
-        if not dat:
-            return
-        return STPlayer(**dat)
+        return await self._generate(f"https://api.status.tw/player/details/{quote(nickname)}", STPlayer)
 
     async def server(self, ip: str, port: int) -> Union[STServer, None]:
         if not re.search(reg_server, ip):
             return
-        dat = await self._send(f"https://api.status.tw/server/details/{ip}/{port}")
-        if not dat:
-            return
-        return STServer(**dat)
+        return await self._generate(f"https://api.status.tw/server/details/{ip}/{port}", STServer)
+
+    async def players(self) -> Union[STClients, None]:
+        return await self._generate("https://api.status.tw/player/list", STClients, "players")
 
     async def servers(self) -> Union[STServers, None]:
-        dat = await self._send("https://api.status.tw/server/list/")
-        if not dat:
-            return
-        dat = {"servers": dat}
-        return STServers(**dat)
+        return await self._generate("https://api.status.tw/server/list/", STServers, "servers")
 
     async def clans(self) -> Union[STClans, None]:
-        dat = await self._send("https://api.status.tw/clan/list")
-        if not dat:
-            return
-        dat = {"clans": dat}
-        return STClans(**dat)
+        return await self._generate("https://api.status.tw/clan/list", STClans, "clans")
 
     async def gametype(self) -> Union[STGameTypes, None]:
-        dat = await self._send("https://api.status.tw/gametype/list")
-        if not dat:
-            return
-        dat = {"gametypes": dat}
-        return STGameTypes(**dat)
+        return await self._generate("https://api.status.tw/gametype/list", STGameTypes, "gametypes")
 
     async def maps(self) -> Union[STMaps, None]:
-        dat = await self._send("https://api.status.tw/map/list")
-        if not dat:
-            return
-        dat = {"maps": dat}
-        return STMaps(**dat)
+        return await self._generate("https://api.status.tw/map/list", STMaps, "maps")
 
     async def bans(self) -> Union[STBans, None]:
-        dat = await self._send("https://api.status.tw/map/list")
-        if not dat:
-            return
-        dat = {"bans": dat}
-        return STBans(**dat)
+        return await self._generate("https://api.status.tw/map/list", STBans, "bans")
 
     async def versions(self) -> Union[STVersions, None]:
-        dat = await self._send("https://api.status.tw/map/list")
-        if not dat:
-            return
-        dat = {"versions": dat}
-        return STVersions(**dat)
+        return await self._generate("https://api.status.tw/map/list", STVersions, "versions")
 
     async def masters_stats(self) -> Union[STMastersStats, None]:
-        dat = await self._send("https://api.status.tw/map/list")
-        if not dat:
-            return
-        dat = {"masters": dat}
-        return STMastersStats(**dat)
+        return await self._generate("https://api.status.tw/map/list", STMastersStats, "masters")

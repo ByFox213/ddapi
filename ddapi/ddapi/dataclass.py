@@ -1,8 +1,40 @@
 # pylint: disable-all
 from collections import Counter
 from typing import Optional, Union, Any
-
 from pydantic import BaseModel, Field
+
+
+# DDStats
+
+
+class QE(BaseModel):
+    sql: str
+    params: dict
+
+
+class DDStatsSql(BaseModel):
+    ok: bool = Field(default=None)
+    database: str = Field(default=None)
+    table: str = Field(default=None)
+    is_view: bool = Field(default=None)
+    human_description_en: str = Field(default=None)
+    rows: list[list] = Field(default=None)
+    truncated: bool = Field(default=None)
+    filtered_table_rows_count: int = Field(default=None)
+    expanded_columns: list = Field(default=None)
+    expandable_columns: list = Field(default=None)
+    columns: list = Field(default=None)
+    primary_keys: list = Field(default=None)
+    units: dict = Field(default=None)
+    query: QE = Field(default=None)
+    facet_results: dict = Field(default=None)
+    suggested_facets: list = Field(default=None)
+    next: int = Field(default=None)
+    next_url: str = Field(default=None)
+    error: str = Field(default='')
+    private: bool = Field(default=None)
+    allow_execute_sql: bool = Field(default=None)
+    query_ms: float = Field(default=None)
 
 
 # ddnet
@@ -375,6 +407,7 @@ class QueryData(BaseModel):
 
 class Query(BaseModel):
     data: list[QueryData]
+
 
 # statusAPI
 
