@@ -61,7 +61,7 @@ class DDnetApi(API):
         return await self._generate(f"https://ddnet.org/players/?json2={quote(player)}", DDPlayer)
 
     async def query(self, player: str) -> Union[Query, None]:
-        return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query)
+        return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query, "data")
 
     async def master(self) -> Union[Master, None]:
         return await self._generate("https://master1.ddnet.org/ddnet/15/servers.json", Master)
@@ -83,7 +83,6 @@ class StatusAPI(API):
     @staticmethod
     def powered() -> str:
         return 'status.tw'
-
 
     async def player(self, nickname) -> Union[STPlayer, None]:
         return await self._generate(f"https://api.status.tw/player/details/{quote(nickname)}", STPlayer)
