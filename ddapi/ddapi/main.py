@@ -7,14 +7,14 @@ from .dataclass import DDPlayer, Master, Player, Query, STPlayer, STServers, STS
     STMaps, STVersions, STMastersStats, STBans, DMap, DDStatsSql
 from .deflt import API
 
-reg_server = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
+REG_SERVER = r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
 
 __all__ = (
     "utc_times",
     "DDnetApi",
     "QwikAPI",
     "StatusAPI",
-    "DDstats"
+    "DDStats"
 )
 
 
@@ -22,7 +22,7 @@ def utc_times(timestamp: int | float) -> datetime:
     return datetime.utcfromtimestamp(timestamp)
 
 
-class DDstats(API):
+class DDStats(API):
     @staticmethod
     def powered() -> str:
         return 'ddstats.org'
@@ -37,7 +37,8 @@ class DDstats(API):
         return await self._rt(f"https://db.ddstats.org/ddnet-7b306cf?sql={quote(sql)}")
 
     async def get_map(self, map_name: str, end: str = "%"):
-        return await self.sql(f"select rowid, Map, Server, Points, Stars, Mapper, Timestamp from maps where Map like \'{map_name}{end}\'")
+        return await self.sql(
+            f"select rowid, Map, Server, Points, Stars, Mapper, Timestamp from maps where Map like \'{map_name}{end}\'")
 
     async def mapinfo(self):
         return await self._rt("https://db.ddstats.org/ddnet-7b306cf/mapinfo.json")
@@ -49,7 +50,7 @@ class DDstats(API):
         return await self._rt("https://db.ddstats.org/ddnet-7b306cf/race.json")
 
     async def maps(self):
-        return await self._rt(f"https://db.ddstats.org/ddnet-7b306cf/maps.json")
+        return await self._rt("https://db.ddstats.org/ddnet-7b306cf/maps.json")
 
 
 class DDnetApi(API):
@@ -59,10 +60,12 @@ class DDnetApi(API):
         return 'ddnet.org'
 
     async def player(self, player: str) -> Union[DDPlayer, None]:
-        return await self._generate(f"https://ddnet.org/players/?json2={quote(player)}", DDPlayer, emoji=self._get_emoji(player))
+        return await self._generate(f"https://ddnet.org/players/?json2={quote(player)}", DDPlayer,
+                                    emoji=self._get_emoji(player))
 
     async def query(self, player: str) -> Union[Query, None]:
-        return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query, "data", emoji=self._get_emoji(player))
+        return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query, "data",
+                                    emoji=self._get_emoji(player))
 
     async def master(self) -> Union[Master, None]:
         return await self._generate("https://master1.ddnet.org/ddnet/15/servers.json", Master)
@@ -77,7 +80,8 @@ class QwikAPI(API):
         return 'ddstats.qwik.space'
 
     async def player(self, nickname) -> Union[Player, None]:
-        return await self._generate(f"https://ddstats.qwik.space/player/json?player={quote(nickname)}", Player, emoji=self._get_emoji(nickname))
+        return await self._generate(f"https://ddstats.qwik.space/player/json?player={quote(nickname)}", Player,
+                                    emoji=self._get_emoji(nickname))
 
 
 class StatusAPI(API):
@@ -86,10 +90,11 @@ class StatusAPI(API):
         return 'status.tw'
 
     async def player(self, nickname) -> Union[STPlayer, None]:
-        return await self._generate(f"https://api.status.tw/player/details/{quote(nickname)}", STPlayer, emoji=self._get_emoji(nickname))
+        return await self._generate(f"https://api.status.tw/player/details/{quote(nickname)}", STPlayer,
+                                    emoji=self._get_emoji(nickname))
 
     async def server(self, ip: str, port: int) -> Union[STServer, None]:
-        if not re.search(reg_server, ip):
+        if not re.search(REG_SERVER, ip):
             return
         return await self._generate(f"https://api.status.tw/server/details/{ip}/{port}", STServer)
 

@@ -1,9 +1,9 @@
 import asyncio
-from ddapi import DDstats, DDStatsSql
+from ddapi import DDStats, DDStatsSql
 
 
 async def main():
-    obj = DDstats()
+    obj = DDStats()
 
     # all maps(limit 100)
     dd_map: DDStatsSql = await obj.maps()

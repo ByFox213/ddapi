@@ -8,7 +8,6 @@ from aiohttp.typedefs import DEFAULT_JSON_DECODER, JSONDecoder
 class API:
     def __init__(self,
                  session: ClientSession = None,
-                 ex: bool = False,
                  json_loads: JSONDecoder = DEFAULT_JSON_DECODER,
                  emojis: dict[str, str] = None):
         self.emojis = emojis
@@ -16,7 +15,6 @@ class API:
             self.emojis = {"fox": "🦊"}
         self.session = session
         self.json_loads = json_loads
-        self.ex = ex
         self.url = "https://ddstats.qwik.space/player/json?player={0}"
 
     def __del__(self):
@@ -30,6 +28,7 @@ class API:
         for name, emoji in self.emojis.items():
             if name in player_name.lower():
                 return emoji
+        return ''
 
     @property
     def closed(self):
@@ -47,8 +46,6 @@ class API:
                     del usr
                     return await req.json(loads=self.json_loads)
         except ClientConnectorError:
-            if self.ex:
-                raise ClientConnectorError
             return
 
     async def _generate(self, url: str, model, k: str = None, emoji: str = None) -> Any:
