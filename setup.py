@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="ddapi-py",
-    version="0.3.1",
+    version="0.3.2",
     author="ByFox",
     description="DDnet api",
     long_description=long_description,

@@ -146,7 +146,7 @@ class DActiov(BaseModel):
 
 
 class DDPlayer(BaseModel):
-    emoji: Any = Field(default=None)
+    emoji: str = Field(default='')
     player: Optional[str] = Field(default=None)
     points: Optional[DPoints] = Field(default=None)
     team_rank: Optional[DRank] = Field(default=None)
@@ -311,6 +311,7 @@ class RecentTop10s(BaseModel):
 
 
 class Player(BaseModel):
+    emoji: str = Field(default='')
     player: Optional[str] = Field(default=None)
     clan: Optional[str] = Field(default=None)
     country: Optional[int] = Field(default=None)
@@ -406,6 +407,7 @@ class QueryData(BaseModel):
 
 
 class Query(BaseModel):
+    emoji: str = Field(default='')
     data: list[QueryData]
 
 
@@ -451,6 +453,7 @@ class STServer(BaseModel):
 
 
 class STPlayer(BaseModel):
+    emoji: str = Field(default='')
     name: str | None = Field(default=None)
     clan: Any | None = Field(default=None)
     country: int | None = Field(default=None)

@@ -9,7 +9,11 @@ class API:
     def __init__(self,
                  session: ClientSession = None,
                  ex: bool = False,
-                 json_loads: JSONDecoder = DEFAULT_JSON_DECODER):
+                 json_loads: JSONDecoder = DEFAULT_JSON_DECODER,
+                 emojis: dict[str, str] = None):
+        self.emojis = emojis
+        if emojis is None:
+            self.emojis = {"fox": "🦊"}
         self.session = session
         self.json_loads = json_loads
         self.ex = ex
@@ -21,6 +25,11 @@ class API:
     @staticmethod
     def powered() -> str:
         return ''
+
+    def _get_emoji(self, player_name: str) -> str:
+        for name, emoji in self.emojis.items():
+            if name in player_name.lower():
+                return emoji
 
     @property
     def closed(self):
@@ -42,12 +51,14 @@ class API:
                 raise ClientConnectorError
             return
 
-    async def _generate(self, url: str, model, k: str = None) -> Any:
+    async def _generate(self, url: str, model, k: str = None, emoji: str = None) -> Any:
         dat = await self._send(url)
         if dat is None:
             return
         if k is not None:
             dat = {k: dat}
+        if emoji is not None:
+            dat["emoji"] = emoji
         return model(**dat)
 
     async def close(self) -> None:

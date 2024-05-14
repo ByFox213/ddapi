@@ -53,15 +53,16 @@ class DDstats(API):
 
 
 class DDnetApi(API):
+
     @staticmethod
     def powered() -> str:
         return 'ddnet.org'
 
     async def player(self, player: str) -> Union[DDPlayer, None]:
-        return await self._generate(f"https://ddnet.org/players/?json2={quote(player)}", DDPlayer)
+        return await self._generate(f"https://ddnet.org/players/?json2={quote(player)}", DDPlayer, emoji=self._get_emoji(player))
 
     async def query(self, player: str) -> Union[Query, None]:
-        return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query, "data")
+        return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query, "data", emoji=self._get_emoji(player))
 
     async def master(self) -> Union[Master, None]:
         return await self._generate("https://master1.ddnet.org/ddnet/15/servers.json", Master)
@@ -76,7 +77,7 @@ class QwikAPI(API):
         return 'ddstats.qwik.space'
 
     async def player(self, nickname) -> Union[Player, None]:
-        return await self._generate(f"https://ddstats.qwik.space/player/json?player={quote(nickname)}", Player)
+        return await self._generate(f"https://ddstats.qwik.space/player/json?player={quote(nickname)}", Player, emoji=self._get_emoji(nickname))
 
 
 class StatusAPI(API):
@@ -85,7 +86,7 @@ class StatusAPI(API):
         return 'status.tw'
 
     async def player(self, nickname) -> Union[STPlayer, None]:
-        return await self._generate(f"https://api.status.tw/player/details/{quote(nickname)}", STPlayer)
+        return await self._generate(f"https://api.status.tw/player/details/{quote(nickname)}", STPlayer, emoji=self._get_emoji(nickname))
 
     async def server(self, ip: str, port: int) -> Union[STServer, None]:
         if not re.search(reg_server, ip):
