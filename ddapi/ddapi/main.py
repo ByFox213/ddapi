@@ -4,7 +4,7 @@ from typing import Union
 from urllib.parse import quote
 
 from .dataclass import DDPlayer, Master, Player, Query, STPlayer, STServers, STServer, STClients, STClans, STGameTypes, \
-    STMaps, STVersions, STMastersStats, STBans, DMap, DDStatsSql
+    STMaps, STVersions, STMastersStats, STBans, DMap, DDStatsSql, DDStatus
 from .deflt import API
 
 REG_SERVER = r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
@@ -62,6 +62,9 @@ class DDnetApi(API):
     async def player(self, player: str) -> Union[DDPlayer, None]:
         return await self._generate(f"https://ddnet.org/players/?json2={quote(player)}", DDPlayer,
                                     emoji=self._get_emoji(player))
+
+    async def status(self) -> Union[DDStatus, None]:
+        return await self._generate("https://ddnet.org/status/json/stats.json", DDStatus)
 
     async def query(self, player: str) -> Union[Query, None]:
         return await self._generate(f"https://ddnet.org/players/?query={quote(player)}", Query, "data",

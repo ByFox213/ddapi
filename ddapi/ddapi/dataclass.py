@@ -1,5 +1,6 @@
 # pylint: disable-all
 from collections import Counter
+from datetime import datetime
 from typing import Optional, Union, Any
 from pydantic import BaseModel, Field
 
@@ -422,8 +423,8 @@ class STClient(BaseModel):
     is_player: bool | None = Field(default=None)
     is_bot: bool | None = Field(default=None)
     is_dummy: bool | None = Field(default=None)
-    first_seen: str | None = Field(default=None)
-    last_seen: str | None = Field(default=None)
+    first_seen: datetime | None = Field(default=None)
+    last_seen: datetime | None = Field(default=None)
 
 
 class STServer(BaseModel):
@@ -447,8 +448,8 @@ class STServer(BaseModel):
     num_dummies: int | None = Field(default=None)
     is_legacy: bool | None = Field(default=None)
     is_multi_support: bool | None = Field(default=None)
-    first_seen: str | None = Field(default=None)
-    last_seen: str | None = Field(default=None)
+    first_seen: datetime | None = Field(default=None)
+    last_seen: datetime | None = Field(default=None)
     clients: list[STClient] | None = Field(default=None)
 
 
@@ -461,8 +462,8 @@ class STPlayer(BaseModel):
     is_player: bool | None = Field(default=None)
     is_bot: bool | None = Field(default=None)
     is_dummy: bool | None = Field(default=None)
-    first_seen: str | None = Field(default=None)
-    last_seen: str | None = Field(default=None)
+    first_seen: datetime | None = Field(default=None)
+    last_seen: datetime | None = Field(default=None)
     server: STServer | None = Field(default=None)
 
 
@@ -477,8 +478,8 @@ class STClients(BaseModel):
 class STClan(BaseModel):
     name: str | None = Field(default=None)
     online_players: int | None = Field(default=None)
-    first_seen: str | None = Field(default=None)
-    last_seen: str | None = Field(default=None)
+    first_seen: datetime | None = Field(default=None)
+    last_seen: datetime | None = Field(default=None)
 
 
 class STClans(BaseModel):
@@ -488,8 +489,8 @@ class STClans(BaseModel):
 class STGameType(BaseModel):
     name: str | None = Field(default=None)
     online_servers: int | None = Field(default=None)
-    first_seen: str | None = Field(default=None)
-    last_seen: str | None = Field(default=None)
+    first_seen: datetime | None = Field(default=None)
+    last_seen: datetime | None = Field(default=None)
 
 
 class STGameTypes(BaseModel):
@@ -504,8 +505,8 @@ class STBan(BaseModel):
     ip: str | None = Field(default=None)
     active: bool | None = Field(default=None)
     reason: str | None = Field(default=None)
-    first_seen: str | None = Field(default=None)
-    unban_date: str | None = Field(default=None)
+    first_seen: datetime | None = Field(default=None)
+    unban_date: datetime | None = Field(default=None)
 
 
 class STBans(BaseModel):
@@ -528,9 +529,35 @@ class STVersions(BaseModel):
 class STMasterStats(BaseModel):
     version: str | None = Field(default=None)
     online_servers: int | None = Field(default=None)
-    first_seen: str | None = Field(default=None)
-    last_seen: str | None = Field(default=None)
+    first_seen: datetime | None = Field(default=None)
+    last_seen: datetime | None = Field(default=None)
 
 
 class STMastersStats(BaseModel):
     masters: list[STMasterStats] | None = Field(default=None)
+
+
+class DDStatusData(BaseModel):
+    name: str | None = Field(default=None)
+    type: str | None = Field(default=None)
+    host: str | None = Field(default=None)
+    location: str | None = Field(default=None)
+    online4: bool | None = Field(default=None)
+    online6: bool | None = Field(default=None)
+    uptime: str | None = Field(default=None)
+    load: float | None = Field(default=None)
+    network_rx: int | None = Field(default=None)
+    network_tx: int | None = Field(default=None)
+    packets_rx: int | None = Field(default=None)
+    packets_tx: int | None = Field(default=None)
+    cpu: int | None = Field(default=None)
+    memory_total: int | None = Field(default=None)
+    memory_used: int | None = Field(default=None)
+    swap_total: int | None = Field(default=None)
+    swap_used: int | None = Field(default=None)
+    hdd_total: int | None = Field(default=None)
+    hdd_used: int | None = Field(default=None)
+
+
+class DDStatus(BaseModel):
+    servers: list[DDStatusData] | None = Field(default=[])
