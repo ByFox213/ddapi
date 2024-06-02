@@ -329,7 +329,7 @@ class RecentTop10s(BaseModel):
 
 class Player(BaseModel):
     emoji: str = Field(default='')
-    pointsGraph: Optional[list[PointG]] = None
+    points_graph: Optional[list[PointG]] = None
     recent_finishes: Optional[list[RecentFinishes]] = None
     favourite_teammates: Optional[list[FavouriteTeammates]] = None
     profile: Optional[Profile] = None
