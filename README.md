@@ -33,26 +33,4 @@ async def main():
 asyncio.run(main())
 ```
 
-qwik
-
-```python
-import asyncio
-from ddapi import Player, QwikAPI
-
-
-async def main():
-    obj = QwikAPI()
-    nickname = "ByFox"
-    user = await obj.player(nickname)
-    if user is None:
-        return "Player not found"
-    print(f"{user.player}: {user.points.points}")
-    # Cor: 31473 
-    await obj.close()  # Closing client Not necessary
-    assert isinstance(user, Player)
-
-
-asyncio.run(main())
-```
-
 [other examples](https://github.com/ByFox213/ddapi/tree/main/example)
