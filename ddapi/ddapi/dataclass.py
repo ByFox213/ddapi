@@ -186,77 +186,77 @@ class PPoints(BaseModel):
 
 
 class PointG(BaseModel):
-    date: Optional[str] = None
-    points: Optional[int] = None
-    rank_points: Optional[int] = None
-    team_points: Optional[int] = None
+    date: Optional[str] | None = None
+    points: Optional[int] | None = None
+    rank_points: Optional[int] | None = None
+    team_points: Optional[int] | None = None
 
 
 class Profile(BaseModel):
-    name: Optional[str] = None
-    points: Optional[int] = None
-    clan: Optional[str] = None
-    country: Optional[int] = None
-    skin_name: Optional[str] = None
-    skin_color_body: Optional[int] = None
-    skin_color_feet: Optional[int] = None
+    name: Optional[str] | None = None
+    points: Optional[int] | None = None
+    clan: Optional[str] | None = None
+    country: Optional[int] | None = None
+    skin_name: Optional[str] | None = None
+    skin_color_body: Optional[int] | None = None
+    skin_color_feet: Optional[int] | None = None
 
 
 class Map(BaseModel):
-    map: Optional[str] = None
-    server: Optional[str] = None
-    points: Optional[int] = None
-    stars: Optional[int] = None
-    mapper: Optional[str] = None
-    timestamp: Optional[datetime] = None
+    map: Optional[str] | None = None
+    server: Optional[str] | None = None
+    points: Optional[int] | None = None
+    stars: Optional[int] | None = None
+    mapper: Optional[str] | None = None
+    timestamp: Optional[datetime] | None = None
 
 
 class RecentFinishes(BaseModel):
-    map: Optional[Map] = None
-    time: Optional[float] = None
-    timestamp: Optional[datetime] = None
-    server: Optional[str] = None
-    cp1: Optional[float] = None
-    cp2: Optional[float] = None
-    cp3: Optional[float] = None
-    cp4: Optional[float] = None
-    cp5: Optional[float] = None
-    cp6: Optional[float] = None
-    cp7: Optional[float] = None
-    cp8: Optional[float] = None
-    cp9: Optional[float] = None
-    cp10: Optional[float] = None
-    cp11: Optional[float] = None
-    cp12: Optional[float] = None
-    cp13: Optional[float] = None
-    cp14: Optional[float] = None
-    cp15: Optional[float] = None
-    cp16: Optional[float] = None
-    cp17: Optional[float] = None
-    cp18: Optional[float] = None
-    cp19: Optional[float] = None
-    cp20: Optional[float] = None
-    cp21: Optional[float] = None
-    cp22: Optional[float] = None
-    cp23: Optional[float] = None
-    cp24: Optional[float] = None
-    cp25: Optional[float] = None
+    map: Optional[Map] | None = None
+    time: Optional[float] | None = None
+    timestamp: Optional[datetime] | None = None
+    server: Optional[str] | None = None
+    cp1: Optional[float] | None = None
+    cp2: Optional[float] | None = None
+    cp3: Optional[float] | None = None
+    cp4: Optional[float] | None = None
+    cp5: Optional[float] | None = None
+    cp6: Optional[float] | None = None
+    cp7: Optional[float] | None = None
+    cp8: Optional[float] | None = None
+    cp9: Optional[float] | None = None
+    cp10: Optional[float] | None = None
+    cp11: Optional[float] | None = None
+    cp12: Optional[float] | None = None
+    cp13: Optional[float] | None = None
+    cp14: Optional[float] | None = None
+    cp15: Optional[float] | None = None
+    cp16: Optional[float] | None = None
+    cp17: Optional[float] | None = None
+    cp18: Optional[float] | None = None
+    cp19: Optional[float] | None = None
+    cp20: Optional[float] | None = None
+    cp21: Optional[float] | None = None
+    cp22: Optional[float] | None = None
+    cp23: Optional[float] | None = None
+    cp24: Optional[float] | None = None
+    cp25: Optional[float] | None = None
 
 
 class FavouriteTeammates(BaseModel):
-    name: str = None
-    ranks_together: int = None
+    name: str | None = None
+    ranks_together: int | None = None
 
 
 class Finishes(BaseModel):
-    map: Map = None
-    name: str = None
-    time: float = None
+    map: Map | None = None
+    name: str | None = None
+    time: float | None = None
     timestamp: Optional[datetime] = None
-    server: str = None
-    rank: int = None
+    server: str | None = None
+    rank: int | None = None
     team_rank: int | None = None
-    seconds_played: int = None
+    seconds_played: int | None = None
 
 
 class Points(BaseModel):
