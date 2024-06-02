@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import Union, Any
 
 import aiohttp
@@ -5,7 +6,7 @@ from aiohttp import ClientSession, ClientConnectorError
 from aiohttp.typedefs import DEFAULT_JSON_DECODER, JSONDecoder
 
 
-class API:
+class API(ABC):
     def __init__(self,
                  session: ClientSession = None,
                  json_loads: JSONDecoder = DEFAULT_JSON_DECODER,
@@ -30,7 +31,6 @@ class API:
                 return emoji
         return ''
 
-    @property
     def closed(self):
         return self.session.closed is None or self.session.closed
 

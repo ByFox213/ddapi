@@ -163,179 +163,189 @@ class DDPlayer(BaseModel):
 
 
 # qwik
-class Skin(BaseModel):
-    name: Optional[str] = Field(default=None)
-    color_body: Optional[int] = Field(default=None)
-    color_feet: Optional[int] = Field(default=None)
-
 
 class PData(BaseModel):
-    rank: Optional[int] = Field(default=None)
-    points: Optional[int] = Field(default=None)
+    rank: int | None = None
+    points: int | None = None
 
 
 class PPoints(BaseModel):
-    Novice: Optional[PData] = Field(default=None)
-    Moderate: Optional[PData] = Field(default=None)
-    Brutal: Optional[PData] = Field(default=None)
-    Insane: Optional[PData] = Field(default=None)
-    Dummy: Optional[PData] = Field(default=None)
+    Novice: Optional[PData] = None
+    Moderate: Optional[PData] = None
+    Brutal: Optional[PData] = None
+    Insane: Optional[PData] = None
+    Dummy: Optional[PData] = None
     DDmaX_Easy: Optional[PData] = Field(default=None, validation_alias='DDmaX.Easy')
     DDmaX_Next: Optional[PData] = Field(default=None, validation_alias='DDmaX.Next')
     DDmaX_Nut: Optional[PData] = Field(default=None, validation_alias='DDmaX.Nut')
     DDmaX_Pro: Optional[PData] = Field(default=None, validation_alias='DDmaX.Pro')
-    Oldschool: Optional[PData] = Field(default=None)
-    Race: Optional[PData] = Field(default=None)
-    Solo: Optional[PData] = Field(default=None)
-    total: Optional[PData] = Field(default=None)
-
-
-class Points(BaseModel):
-    points: Optional[PPoints] = Field(default=None)
-    rankpoints: Optional[PPoints] = Field(default=None)
-    teampoints: Optional[PPoints] = Field(default=None)
-
-
-class RData(BaseModel):
-    Map: Optional[str] = Field(default=None)
-    Name: Optional[str] = Field(default=None)
-    Time: Optional[float] = Field(default=None)
-    Server: Optional[str] = Field(default=None)
-    Rank: Optional[int] = Field(default=None)
-    Teamrank: Optional[int] = Field(default=None)
-    Category: str
-    Points: int
-
-
-class Rankings(BaseModel):
-    Novice: Optional[list[RData]] = Field(default=None)
-    Moderate: Optional[list[RData]] = Field(default=None)
-    Brutal: Optional[list[RData]] = Field(default=None)
-    Insane: Optional[list[RData]] = Field(default=None)
-    Dummy: Optional[list[RData]] = Field(default=None)
-    DDmaX_Easy: Optional[list[RData]] = Field(default=None, validation_alias='DDmaX.Easy')
-    DDmaX_Next: Optional[list[RData]] = Field(default=None, validation_alias='DDmaX.Next')
-    DDmaX_Nut: Optional[list[RData]] = Field(default=None, validation_alias='DDmaX.Nut')
-    DDmaX_Pro: Optional[list[RData]] = Field(default=None, validation_alias='DDmaX.Pro')
-    Oldschool: Optional[list[RData]] = Field(default=None)
-    Race: Optional[list[RData]] = Field(default=None)
-    Solo: Optional[list[RData]] = Field(default=None)
-    Fun: Optional[list[RData]] = Field(default=None)
-    total: Optional[list[RData]] = Field(default=None)
-
-
-class RPointG(BaseModel):
-    date: Optional[str] = Field(default=None)
-    rankpoints: Optional[int] = Field(default=None)
-    teampoints: Optional[int] = Field(default=None)
+    Oldschool: Optional[PData] = None
+    Race: Optional[PData] = None
+    Solo: Optional[PData] = None
+    total: Optional[PData] = None
 
 
 class PointG(BaseModel):
-    date: Optional[str] = Field(default=None)
-    points: Optional[int] = Field(default=None)
-    maps: Optional[str] = Field(default=None)
+    date: Optional[str] = None
+    points: Optional[int] = None
+    rank_points: Optional[int] = None
+    team_points: Optional[int] = None
+
+
+class Profile(BaseModel):
+    name: Optional[str] = None
+    points: Optional[int] = None
+    clan: Optional[str] = None
+    country: Optional[int] = None
+    skin_name: Optional[str] = None
+    skin_color_body: Optional[int] = None
+    skin_color_feet: Optional[int] = None
+
+
+class Map(BaseModel):
+    map: Optional[str] = None
+    server: Optional[str] = None
+    points: Optional[int] = None
+    stars: Optional[int] = None
+    mapper: Optional[str] = None
+    timestamp: Optional[datetime] = None
+
+
+class RecentFinishes(BaseModel):
+    map: Optional[Map] = None
+    time: Optional[float] = None
+    timestamp: Optional[datetime] = None
+    server: Optional[str] = None
+    cp1: Optional[float] = None
+    cp2: Optional[float] = None
+    cp3: Optional[float] = None
+    cp4: Optional[float] = None
+    cp5: Optional[float] = None
+    cp6: Optional[float] = None
+    cp7: Optional[float] = None
+    cp8: Optional[float] = None
+    cp9: Optional[float] = None
+    cp10: Optional[float] = None
+    cp11: Optional[float] = None
+    cp12: Optional[float] = None
+    cp13: Optional[float] = None
+    cp14: Optional[float] = None
+    cp15: Optional[float] = None
+    cp16: Optional[float] = None
+    cp17: Optional[float] = None
+    cp18: Optional[float] = None
+    cp19: Optional[float] = None
+    cp20: Optional[float] = None
+    cp21: Optional[float] = None
+    cp22: Optional[float] = None
+    cp23: Optional[float] = None
+    cp24: Optional[float] = None
+    cp25: Optional[float] = None
+
+
+class FavouriteTeammates(BaseModel):
+    name: str = None
+    ranks_together: int = None
+
+
+class Finishes(BaseModel):
+    map: Map = None
+    name: str = None
+    time: float = None
+    timestamp: Optional[datetime] = None
+    server: str = None
+    rank: int = None
+    team_rank: int | None = None
+    seconds_player: int = None
+
+
+class Points(BaseModel):
+    weekly_points: PData | None = None
+    monthly_points: PData | None = None
+    yearly_points: PData | None = None
+    points: PPoints | None = None
+    rank_points: PPoints | None = None
+    team_points: PPoints | None = None
+
+
+class RecentActivity(BaseModel):
+    name: str | None = Field(default=None)
+    date: str | None = Field(default=None)
+    map_name: str | None = Field(default=None)
+    map: Map | None = Field(default=None)
+    seconds_player: int | None = Field(default=None)
 
 
 class RecentPlayerInfo(BaseModel):
-    date: Optional[str] = Field(default=None)
-    name: Optional[str] = Field(default=None)
-    clan: Optional[str] = Field(default=None)
-    country: Optional[int] = Field(default=None)
-    skin_name: Optional[str] = Field(default=None)
-    skin_color_body: Optional[int] = Field(default=None)
-    skin_color_feet: Optional[int] = Field(default=None)
-
-
-class RecentPlayTime(BaseModel):
-    date: Optional[str] = Field(default=None)
-    map: Optional[str] = Field(default=None)
-    player: Optional[str] = Field(default=None)
-    Playtime: Optional[int] = Field(default=None)
-    Server: Optional[str] = Field(default=None)
-
-
-class PlaytimeCategories(BaseModel):
-    Category: Optional[str] = Field(default=None)
-    Playtime: Optional[int] = Field(default=None)
-
-
-class PlaytimeGameTypes(BaseModel):
-    gametype: Optional[str] = Field(default=None)
-    Playtime: Optional[int] = Field(default=None)
-
-
-class PlaytimeLocation(BaseModel):
-    location: Optional[str] = Field(default=None)
-    Playtime: Optional[int] = Field(default=None)
-
-
-class PlaytimePerMonth(BaseModel):
-    Year: Optional[str] = Field(default=None)
-    Month: Optional[str] = Field(default=None)
-    Playtime: Optional[int] = Field(default=None)
+    name: str | None = None
+    clan: str | None = None
+    country: int | None = None
+    skin_name: str | None = None
+    skin_color_body: int | None = None
+    skin_color_feet: int | None = None
+    last_seen: datetime | None = None
+    seconds_played: int | None = None
 
 
 class MostPlayedMaps(BaseModel):
-    map: Optional[str] = Field(default=None)
-    Server: Optional[str] = Field(default=None)
-    Playtime: Optional[int] = Field(default=None)
+    map_name: str | None = None
+    seconds_player: int | None = None
+    map: Map | None = None
+
+
+class MostPlayed(BaseModel):
+    key: str | None = None
+    seconds_played: int | None = None
+
+
+class PlaytimePerMonth(BaseModel):
+    year_month: str | None = None
+    month: str | None = None
+    seconds_played: int | None = None
+
+
+class FavouriteRank1sTeammates(BaseModel):
+    name: str
+    ranks_together: int
 
 
 class AllTop10s(BaseModel):
-    Server: Optional[str] = Field(default=None)
-    Map: Optional[str] = Field(default=None)
-    rank: Optional[int] = Field(default=None)
-    rtime: Optional[float] = Field(default=None)
-    teamrank: Optional[int] = Field(default=None)
-    ttime: Optional[float] = Field(default=None)
-
-
-class AmountOfTop10(BaseModel):
-    Name: Optional[str] = Field(default=None)
-    Rank: Optional[int] = Field(default=None)
-    RankAmount: Optional[int] = Field(default=None)
-    TeamRankAmount: Optional[int] = Field(default=None)
-
-
-class Rank1sPartners(BaseModel):
-    Name: Optional[str] = Field(default=None)
-    Amount: Optional[int] = Field(default=None)
+    map: Map | None = None
+    name: str | None = None
+    time: float | None = None
+    rank: int | None = None
+    teamrank: int | None = None
+    team_time: float | None = None
 
 
 class RecentTop10s(BaseModel):
-    Timestamp: Optional[str] = Field(default=None)
-    Server: Optional[str] = Field(default=None)
-    Name: Optional[str] = Field(default=None)
-    Time: Optional[float] = Field(default=None)
-    Map: Optional[str] = Field(default=None)
-    Rank: Optional[int] = Field(default=None)
+    rank_type: str | None = None
+    map: str | None = None
+    time: float | None = None
+    rank: int | None = None
+    timestamp: datetime | None = None
+    server: str | None = None
 
 
 class Player(BaseModel):
     emoji: str = Field(default='')
-    player: Optional[str] = Field(default=None)
-    clan: Optional[str] = Field(default=None)
-    country: Optional[int] = Field(default=None)
-    skin: Optional[Skin] = Field(default=None)
-    stamp: Optional[str] = Field(default=None)
-    points: Optional[Points] = Field(default=None)
-    rankings: Optional[Rankings] = Field(default=None)
-    isMapper: Optional[int] = Field(default=None)
-    rankedPointsGraph: Optional[list[RPointG]] = Field(default=None)
-    pointsGraph: Optional[list[PointG]] = Field(default=None)
-    playtime: Optional[dict] = Field(default=None)
-    recentPlayerinfo: Optional[list[RecentPlayerInfo]] = Field(default=None)
-    recentPlaytime: Optional[list[RecentPlayTime]] = Field(default=None)
-    playtimeCategories: Optional[list[PlaytimeCategories]] = Field(default=None)
-    playtimeGametypes: Optional[list[PlaytimeGameTypes]] = Field(default=None)
-    playtimeLocation: Optional[list[PlaytimeLocation]] = Field(default=None)
-    playtimePerMonth: Optional[list[PlaytimePerMonth]] = Field(default=None)
-    mostPlayedMaps: Optional[list[MostPlayedMaps]] = Field(default=None)
-    allTop10s: Optional[list[AllTop10s]] = Field(default=None)
-    AmountOfTop10Placements: Optional[list[AmountOfTop10]] = Field(default=None,
-                                                                   validation_alias="AmountOfTop10Placements")
-    rank1sPartners: Optional[list[Rank1sPartners]] = Field(default=None)
-    recentTop10s: Optional[list[RecentTop10s]] = Field(default=None)
+    pointsGraph: Optional[list[PointG]] = None
+    recent_finishes: Optional[list[RecentFinishes]] = None
+    favourite_teammates: Optional[list[FavouriteTeammates]] = None
+    profile: Optional[Profile] = None
+    is_mapper: bool = None
+    finishes: Optional[list[Finishes]] = None
+    points: Points = None
+    recent_activity: Optional[list[RecentActivity]] = None
+    recent_player_info: Optional[list[RecentPlayerInfo]] = None
+    most_played_maps: Optional[list[MostPlayedMaps]] = None
+    most_played_gametypes: Optional[list[MostPlayed]] = None
+    most_played_categories: Optional[list[MostPlayed]] = None
+    most_played_locations: Optional[list[MostPlayed]] = None
+    playtime_per_month: Optional[list[PlaytimePerMonth]] = None
+    favourite_rank1s_teammates: Optional[list[FavouriteRank1sTeammates]] = None
+    all_top_10s: Optional[list[AllTop10s]] = None
+    recent_top_10s: Optional[list[RecentTop10s]] = None
 
 
 class Client(BaseModel):

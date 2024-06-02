@@ -1,15 +1,13 @@
 import asyncio
-from ddapi import Player, QwikAPI
+from ddapi import Player, DDstats
 
 
 async def main():
-    obj = QwikAPI()
+    obj = DDstats()
     nickname = "ByFox"
     user = await obj.player(nickname)
-    if user is None:
-        await obj.close()
-        return "Player not found"
-    print(user)
+    if user is not None:
+        print(user)
     await obj.close()  # Closing client Not necessary
     assert isinstance(user, Player)
 
