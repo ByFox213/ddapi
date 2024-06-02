@@ -314,7 +314,7 @@ class AllTop10s(BaseModel):
     name: str | None = None
     time: float | None = None
     rank: int | None = None
-    teamrank: int | None = None
+    team_rank: int | None = None
     team_time: float | None = None
 
 
