@@ -256,7 +256,7 @@ class Finishes(BaseModel):
     server: str = None
     rank: int = None
     team_rank: int | None = None
-    seconds_player: int = None
+    seconds_played: int = None
 
 
 class Points(BaseModel):
@@ -273,7 +273,7 @@ class RecentActivity(BaseModel):
     date: str | None = Field(default=None)
     map_name: str | None = Field(default=None)
     map: Map | None = Field(default=None)
-    seconds_player: int | None = Field(default=None)
+    seconds_played: int | None = Field(default=None)
 
 
 class RecentPlayerInfo(BaseModel):
@@ -289,7 +289,7 @@ class RecentPlayerInfo(BaseModel):
 
 class MostPlayedMaps(BaseModel):
     map_name: str | None = None
-    seconds_player: int | None = None
+    seconds_played: int | None = None
     map: Map | None = None
 
 
