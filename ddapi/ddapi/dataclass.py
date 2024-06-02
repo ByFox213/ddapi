@@ -283,7 +283,7 @@ class RecentPlayerInfo(BaseModel):
     skin_name: str | None = None
     skin_color_body: int | None = None
     skin_color_feet: int | None = None
-    last_seen: datetime | None = None
+    last_seen: str | None = None
     seconds_played: int | None = None
 
 
