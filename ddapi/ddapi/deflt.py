@@ -45,6 +45,7 @@ class API(ABC):
                         return
                     del usr
                     return await req.json(loads=self.json_loads)
+                return
         except ClientConnectorError:
             return
 

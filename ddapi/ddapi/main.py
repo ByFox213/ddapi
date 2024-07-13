@@ -112,10 +112,10 @@ class StatusAPI(API):
         return await self._generate("https://api.status.tw/map/list", STMaps, "maps")
 
     async def bans(self) -> Union[STBans, None]:
-        return await self._generate("https://api.status.tw/map/list", STBans, "bans")
+        return await self._generate("https://api.status.tw/master/ban/list", STBans, "bans")
 
     async def versions(self) -> Union[STVersions, None]:
-        return await self._generate("https://api.status.tw/map/list", STVersions, "versions")
+        return await self._generate("https://api.status.tw/version/list", STVersions, "versions")
 
     async def masters_stats(self) -> Union[STMastersStats, None]:
-        return await self._generate("https://api.status.tw/map/list", STMastersStats, "masters")
+        return await self._generate("https://api.status.tw/master/stats", STMastersStats, "masters")
