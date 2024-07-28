@@ -349,14 +349,14 @@ class Player(BaseModel):
 
 
 class Client(BaseModel):
-    name: str = Field(default='')
-    clan: str = Field(default='')
-    country: int = Field(default=-1)
-    score: int = Field(default=-9999)
-    is_player: bool = Field(default=None)
-    skin: dict = Field(default=None)
-    afk: bool = Field(default=None)
-    team: int = Field(default=0)
+    name: str | None = Field(default='')
+    clan: str | None = Field(default='')
+    country: int | None = Field(default=-1)
+    score: int | None = Field(default=-9999)
+    is_player: bool | None = Field(default=None)
+    skin: dict | None = Field(default=None)
+    afk: bool | None = Field(default=None)
+    team: int | None = Field(default=0)
 
 
 class Info(BaseModel):
