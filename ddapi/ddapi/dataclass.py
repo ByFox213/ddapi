@@ -360,14 +360,14 @@ class Client(BaseModel):
 
 
 class Info(BaseModel):
-    max_clients: int = Field(default=0)
-    max_players: int = Field(default=0)
-    passworded: bool = Field(default=None)
-    game_type: str = Field(default=None)
-    name: str = Field(default=None)
-    map: dict = Field(default=None)
-    version: str = Field(default=None)
-    clients: list[Client] = Field(default=None)
+    max_clients: int | None = Field(default=0)
+    max_players: int | None = Field(default=0)
+    passworded: bool | None = Field(default=None)
+    game_type: str | None = Field(default=None)
+    name: str | None = Field(default=None)
+    map: dict | None = Field(default=None)
+    version: str | None = Field(default=None)
+    clients: list[Client] | None = Field(default=None)
 
 
 class Server(BaseModel):
