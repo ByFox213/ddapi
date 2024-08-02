@@ -1,9 +1,10 @@
 # pylint: disable-all
 from collections import Counter
 from datetime import datetime
-from typing import Optional, Union, Any
+from typing import Optional, Union, Any, AsyncGenerator
 from pydantic import BaseModel, Field
 
+rm_list = ["DD-Persian", "/vDQMHSss8W"]
 
 # DDStats
 
@@ -376,33 +377,40 @@ class Server(BaseModel):
     info: Info = Field(default=None)
 
     def get_count_client(self) -> int:
-        return len(self.info.clients)
+        if self.info is not None and self.info.clients is not None:
+            return len(self.info.clients)
+        return 0
 
 
 class Master(BaseModel):
     servers: list[Server]
 
-    async def get_info(self):
+    async def get_info(self) -> AsyncGenerator[Info, None]:
         for i in self.servers:
+            if i.info is None:
+                continue
             yield i.info
 
-    async def get_clients(self):
+    async def get_clients(self) -> AsyncGenerator[Client, None]:
         for i in self.servers:
+            if i.info is None or i.info.clients is None:
+                continue
             yield i.info.clients
 
     def get_count(self) -> int:
         return len(self.servers)
 
-    def get_clans(self, limit: int = 50, rm=None):
+    def get_clans(self, limit: int = 50, rm: list[str] = None) -> list[tuple[Any, int]]:
         if rm is None:
-            rm = ["DD-Persian"]
-        dat = Counter(client.clan for server in self.servers for client in server.info.clients)
+            rm = []
+        rm.extend(rm_list)
+        dat = Counter(client.clan for server in self.servers for client in server.info.clients if server.info is not None and server.info.clients is not None)
         del dat['']
         for i in rm:
             del dat[i]
         return sorted(dat.items(), key=lambda x: x[1], reverse=True)[:limit]
 
-    def get_count_servers(self, limit: int = 10):
+    def get_count_servers(self, limit: int = 10) -> list[tuple[int, list | Any, str | None, str | None]]:
         dat = []
         for i in self.servers:
             add = i.addresses
