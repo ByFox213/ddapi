@@ -404,8 +404,7 @@ class Master(BaseModel):
         if rm is None:
             rm = []
         rm.extend(rm_list)
-        dat = Counter(client.clan for server in self.servers for client in server.info.clients if server.info is not None and server.info.clients is not None)
-        del dat['']
+        dat = Counter(client.clan for server in self.servers for client in server.info.clients if server.info is not None and server.info.clients is not None and client != '')
         for i in rm:
             del dat[i]
         return sorted(dat.items(), key=lambda x: x[1], reverse=True)[:limit]
