@@ -370,11 +370,17 @@ class Info(BaseModel):
     version: str | None = Field(default=None)
     clients: list[Client] | None = Field(default=None)
 
+    def __len__(self) -> int:
+        return len(self.clients)
+
 
 class Server(BaseModel):
     addresses: Union[list, str] = Field(default=None)
     location: str = Field(default=None)
     info: Info = Field(default=None)
+
+    def __len__(self) -> int:
+        return len(self.info.clients if self.info is not None else 0)
 
     def get_count_client(self) -> int:
         if self.info is not None and self.info.clients is not None:
@@ -384,6 +390,9 @@ class Server(BaseModel):
 
 class Master(BaseModel):
     servers: list[Server]
+
+    def __len__(self) -> int:
+        return len(self.servers)
 
     async def get_info(self) -> AsyncGenerator[Info, None]:
         for i in self.servers:
@@ -397,14 +406,18 @@ class Master(BaseModel):
                 continue
             yield i.info.clients
 
-    def get_count(self) -> int:
-        return len(self.servers)
-
     def get_clans(self, limit: int = 50, rm: list[str] = None) -> list[tuple[Any, int]]:
         if rm is None:
             rm = []
         rm.extend(rm_list)
-        dat = Counter(client.clan for server in self.servers for client in server.info.clients if server.info is not None and server.info.clients is not None and client != '')
+        if not self.servers:
+            return []
+        dat = Counter(client.clan
+                      for server in self.servers
+                      for client in server.info.clients
+                      if server.info is not None
+                      and server.info.clients is not None
+                      and client != '')
         for i in rm:
             del dat[i]
         return sorted(dat.items(), key=lambda x: x[1], reverse=True)[:limit]
@@ -427,131 +440,6 @@ class QueryData(BaseModel):
 class Query(BaseModel):
     emoji: str = Field(default='')
     data: list[QueryData]
-
-
-# statusAPI
-
-
-class STClient(BaseModel):
-    name: str | None = Field(default=None)
-    clan: str | None = Field(default=None)
-    country: int | None = Field(default=None)
-    score: int | None = Field(default=None)
-    is_player: bool | None = Field(default=None)
-    is_bot: bool | None = Field(default=None)
-    is_dummy: bool | None = Field(default=None)
-    first_seen: datetime | None = Field(default=None)
-    last_seen: datetime | None = Field(default=None)
-
-
-class STServer(BaseModel):
-    server_id: int | None = Field(default=None)
-    ip: str | None = Field(default=None)
-    port: int | None = Field(default=None)
-    name: str | None = Field(default=None)
-    map: str | None = Field(default=None)
-    gametype: str | None = Field(default=None)
-    version: str | None = Field(default=None)
-    password: bool | None = Field(default=None)
-    server_level: int | None = Field(default=None)
-    hostname: str | None = Field(default=None)
-    master_server: str | None = Field(default=None)
-    num_clients: int | None = Field(default=None)
-    max_clients: int | None = Field(default=None)
-    num_players: int | None = Field(default=None)
-    max_players: int | None = Field(default=None)
-    num_bot_players: int | None = Field(default=None)
-    num_bot_spectators: int | None = Field(default=None)
-    num_dummies: int | None = Field(default=None)
-    is_legacy: bool | None = Field(default=None)
-    is_multi_support: bool | None = Field(default=None)
-    first_seen: datetime | None = Field(default=None)
-    last_seen: datetime | None = Field(default=None)
-    clients: list[STClient] | None = Field(default=None)
-
-
-class STPlayer(BaseModel):
-    emoji: str = Field(default='')
-    name: str | None = Field(default=None)
-    clan: Any | None = Field(default=None)
-    country: int | None = Field(default=None)
-    score: int | None = Field(default=None)
-    is_player: bool | None = Field(default=None)
-    is_bot: bool | None = Field(default=None)
-    is_dummy: bool | None = Field(default=None)
-    first_seen: datetime | None = Field(default=None)
-    last_seen: datetime | None = Field(default=None)
-    server: STServer | None = Field(default=None)
-
-
-class STServers(BaseModel):
-    servers: list[STServer] | None = Field(default=None)
-
-
-class STClients(BaseModel):
-    players: list[STClient] | None = Field(default=None)
-
-
-class STClan(BaseModel):
-    name: str | None = Field(default=None)
-    online_players: int | None = Field(default=None)
-    first_seen: datetime | None = Field(default=None)
-    last_seen: datetime | None = Field(default=None)
-
-
-class STClans(BaseModel):
-    clans: list[STClan] | None = Field(default=None)
-
-
-class STGameType(BaseModel):
-    name: str | None = Field(default=None)
-    online_servers: int | None = Field(default=None)
-    first_seen: datetime | None = Field(default=None)
-    last_seen: datetime | None = Field(default=None)
-
-
-class STGameTypes(BaseModel):
-    gametypes: list[STGameType] | None = Field(default=None)
-
-
-class STMaps(BaseModel):
-    maps: list[STGameType] | None = Field(default=None)
-
-
-class STBan(BaseModel):
-    ip: str | None = Field(default=None)
-    active: bool | None = Field(default=None)
-    reason: str | None = Field(default=None)
-    first_seen: datetime | None = Field(default=None)
-    unban_date: datetime | None = Field(default=None)
-
-
-class STBans(BaseModel):
-    bans: list[STBan] | None = Field(default=None)
-
-
-class STVersion(BaseModel):
-    id: str | None = Field(default=None)
-    hostname: str | None = Field(default=None)
-    owner: str | None = Field(default=None)
-    country: str | None = Field(default=None)
-    num_players: int | None = Field(default=None)
-    num_servers: int | None = Field(default=None)
-
-
-class STVersions(BaseModel):
-    versions: list[STVersion] | None = Field(default=None)
-
-
-class STMasterStats(BaseModel):
-    version: str | None = Field(default=None)
-    online_servers: int | None = Field(default=None)
-    first_seen: datetime | None = Field(default=None)
-    last_seen: datetime | None = Field(default=None)
-
-
-class STMastersStats(BaseModel):
-    masters: list[STMasterStats] | None = Field(default=None)
 
 
 class DDStatusData(BaseModel):

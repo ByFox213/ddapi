@@ -3,8 +3,7 @@ from datetime import datetime
 from typing import Union
 from urllib.parse import quote
 
-from .dataclass import DDPlayer, Master, Player, Query, STPlayer, STServers, STServer, STClients, STClans, STGameTypes, \
-    STMaps, STVersions, STMastersStats, STBans, DMap, DDStatsSql, DDStatus
+from .dataclass import DDPlayer, Master, Player, Query, DMap, DDStatsSql, DDStatus
 from .deflt import API
 
 REG_SERVER = r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
@@ -13,7 +12,6 @@ __all__ = (
     "utc_times",
     "DDnetApi",
     "DDstats",
-    "StatusAPI",
     "DDStatsDB"
 )
 
@@ -78,44 +76,4 @@ class DDstats(API):
         return 'ddstats.tw'
 
     async def player(self, nickname) -> Union[Player, None]:
-        return await self._generate(f"https://ddstats.tw/player/json?player={quote(nickname)}", Player,
-                                    emoji=self._get_emoji(nickname))
-
-
-class StatusAPI(API):
-    @staticmethod
-    def powered() -> str:
-        return 'status.tw'
-
-    async def player(self, nickname) -> Union[STPlayer, None]:
-        return await self._generate(f"https://api.status.tw/player/details/{quote(nickname)}", STPlayer,
-                                    emoji=self._get_emoji(nickname))
-
-    async def server(self, ip: str, port: int) -> Union[STServer, None]:
-        if not re.search(REG_SERVER, ip):
-            return
-        return await self._generate(f"https://api.status.tw/server/details/{ip}/{port}", STServer)
-
-    async def players(self) -> Union[STClients, None]:
-        return await self._generate("https://api.status.tw/player/list", STClients, "players")
-
-    async def servers(self) -> Union[STServers, None]:
-        return await self._generate("https://api.status.tw/server/list/", STServers, "servers")
-
-    async def clans(self) -> Union[STClans, None]:
-        return await self._generate("https://api.status.tw/clan/list", STClans, "clans")
-
-    async def gametype(self) -> Union[STGameTypes, None]:
-        return await self._generate("https://api.status.tw/gametype/list", STGameTypes, "gametypes")
-
-    async def maps(self) -> Union[STMaps, None]:
-        return await self._generate("https://api.status.tw/map/list", STMaps, "maps")
-
-    async def bans(self) -> Union[STBans, None]:
-        return await self._generate("https://api.status.tw/master/ban/list", STBans, "bans")
-
-    async def versions(self) -> Union[STVersions, None]:
-        return await self._generate("https://api.status.tw/version/list", STVersions, "versions")
-
-    async def masters_stats(self) -> Union[STMastersStats, None]:
-        return await self._generate("https://api.status.tw/master/stats", STMastersStats, "masters")
+        return await self._generate(f"https://ddstats.tw/player/json?player={quote(nickname)}", Player, emoji=self._get_emoji(nickname))
