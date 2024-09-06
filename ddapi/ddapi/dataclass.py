@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 rm_list = ["DD-Persian", "/vDQMHSss8W"]
 
+
 # DDStats
 
 
@@ -407,29 +408,26 @@ class Master(BaseModel):
             yield i.info.clients
 
     def get_clans(self, limit: int = 50, rm: list[str] = None) -> list[tuple[Any, int]]:
-        if rm is None:
-            rm = []
-        rm.extend(rm_list)
+        remove_list = [] if rm is None else rm
+        remove_list.extend(["DD-Persian", ''])
         if not self.servers:
             return []
-        dat = Counter(client.clan
-                      for server in self.servers
-                      for client in server.info.clients
-                      if server.info is not None
-                      and server.info.clients is not None
-                      and client != '')
-        for i in rm:
+        dat: Counter[Any] = Counter(client.clan
+                                    for server in self.servers
+                                    for client in server.info.clients
+                                    if server.info is not None
+                                    and server.info.clients is not None
+                                    and client != '')
+        for i in remove_list:
             del dat[i]
         return sorted(dat.items(), key=lambda x: x[1], reverse=True)[:limit]
 
-    def get_count_servers(self, limit: int = 10) -> list[tuple[int, list | Any, str | None, str | None]]:
-        dat = []
-        for i in self.servers:
-            add = i.addresses
-            if isinstance(i.addresses, list):
-                add = i.addresses[0]
-            dat.append((i.get_count_client(), add, i.info.game_type, i.info.name))
-        return sorted(dat, key=lambda x: x[0], reverse=True)[:limit]
+    def get_count_servers(self, limit: int = 10) -> list:
+        return sorted((
+            (i.get_count_client(), i.addresses[0], i.info.game_type, i.info.name)
+            if isinstance(i.addresses, list)
+            else (i.get_count_client(), i.addresses, i.info.game_type, i.info.name)
+            for i in self.servers), key=lambda x: x[0], reverse=True)[:limit]
 
 
 class QueryData(BaseModel):

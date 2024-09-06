@@ -8,7 +8,7 @@ async def main():
     if status is None:
         return await obj.close()
     status = status.servers[0]
-    print(f"{status.name}: {status.cpu}")
+    print(f"{status.name}. cpu: {status.cpu}")
     await obj.close()  # Closing client Not necessary
 
 

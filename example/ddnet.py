@@ -9,7 +9,7 @@ async def main():
     if user is None:
         await obj.close()
         return "Player not found"
-    print(f"{user.player}: {user.points.total}")
+    print(f"{user.player}: {user.points.points} / {user.points.total}")
     await obj.close()  # Closing client Not necessary
     assert isinstance(user, DDPlayer)
 
