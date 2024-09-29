@@ -1,41 +1,28 @@
-import asyncio
 from abc import ABC
-from json import JSONDecoder
-from typing import Union, Any
-from urllib.parse import quote
+from typing import Union, Optional, TypeVar, Type, Any
 
 import aiohttp
 from aiohttp import ClientSession, ClientConnectorError
 from aiohttp.typedefs import DEFAULT_JSON_DECODER
 
-from .dataclass import Player
+ModelType = TypeVar('ModelType', bound='Model')
 
 
 class API(ABC):
-    def __init__(self,
-                 session: ClientSession = None,
-                 json_loads: JSONDecoder = DEFAULT_JSON_DECODER,
-                 emojis: dict[str, str] = None):
-        self.emojis = emojis
-        if emojis is None:
-            self.emojis = {"fox": "🦊"}
+    def __init__(
+            self,
+            session: ClientSession = None,
+            json_loads: Any = DEFAULT_JSON_DECODER
+    ):
         self.session = session
         self.json_loads = json_loads
-        self.url = "https://ddstats.qwik.space/player/json?player={0}"
 
     @staticmethod
     def powered() -> str:
         """Return an empty string."""
         return ''
 
-    async def _get_emoji(self, player_name: str) -> str:
-        """Return an emoji for the given player name."""
-        for name, emoji in self.emojis.items():
-            if name in player_name.lower():
-                return emoji
-        return ''
-
-    async def _send(self, url: str) -> Union[dict, None]:
+    async def _get(self, url: str) -> Union[dict, None]:
         """Send a GET request to the given URL and return the response as JSON."""
         if self.session is None:
             self.session = aiohttp.ClientSession()
@@ -47,38 +34,31 @@ class API(ABC):
         except ClientConnectorError:
             return
 
-    async def _generate(
+    async def _generate_model_instance(
             self,
             url: str,
-            model,
-            k: str = None,
-            emoji: str = None
-    ) -> Union[Any, None]:
-        """Generate a model instance from the given URL and optional keyword arguments."""
-        dat = await self._send(url)
-        if dat is None:
+            model: Type[ModelType],
+            k: str = None
+    ) -> Optional[ModelType]:
+        """Generate a model instance from the given URL and optional keyword arguments.
+
+        Args:
+            url (str): The URL to fetch data from.
+            model (Type[ModelType]): The model class to instantiate.
+            k (str, optional): An optional keyword to wrap the data in a dictionary.
+
+        Returns:
+            Optional[ModelType]: A model instance.
+        """
+        dat = await self._get(url)
+        if dat is None or not dat:
             return
-        if k is not None:
-            dat = {k: dat}
-        if emoji is not None:
-            dat["emoji"] = emoji
-        return model(**dat)
+
+        data_to_pass = {k: dat} if k else dat
+        return model(**data_to_pass)
 
     async def close(self) -> None:
         """Close the aiohttp session."""
         if self.session:
             await self.session.close()
             self.session = None
-
-    async def player(self, player_name: str) -> Player:
-        """Fetch player data from the API and return it as a dictionary."""
-        return await self._generate(
-            self.url.format(quote(player_name)),
-            Player,
-            emoji=await self._get_emoji(player_name)
-        )
-
-    async def players(self, player_names: list[str]) -> tuple[Player]:
-        """Fetch data for multiple players from the API and return it as a list of dictionaries."""
-        tasks = [self.player(player_name) for player_name in player_names]
-        return await asyncio.gather(*tasks)

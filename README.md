@@ -31,5 +31,5 @@ async def main():
 
 asyncio.run(main())
 ```
-
+tested on python 3.11
 [other examples](https://github.com/ByFox213/ddapi/tree/main/example)

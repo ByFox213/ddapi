@@ -4,12 +4,12 @@ from ddapi import DDnetApi, Master
 
 async def main():
     obj = DDnetApi()
-    player = "ByFox"
+    player = "nameless tee"
     master: Master = await obj.master()
-    async for info in master.get_info():
-        for client in info.clients:
+    for server in master.servers:
+        for client in server.info.clients:
             if player == client.name:
-                print(f'{info.name}: {player}')
+                print(f'{server.info.name}: {player}')
     await obj.close()  # Closing client Not necessary
     assert isinstance(master, Master)
 
