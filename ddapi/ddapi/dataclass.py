@@ -172,8 +172,8 @@ class Profile(BaseModel):
     clan: str
     country: int
     skin_name: str
-    skin_color_body: int
-    skin_color_feet: int
+    skin_color_body: Optional[int] = None
+    skin_color_feet: Optional[int] = None
 
 
 class DDMap(BaseModel):
