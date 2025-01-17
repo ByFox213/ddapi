@@ -1,12 +1,12 @@
 from unittest import IsolatedAsyncioTestCase
 
-from ddapi import DDnetApi, DDstats, Player, DMap, DDPlayer, Query, Master, DDStatus
+from ddapi import DDnetApi, DDstats, Player, DMap, DDPlayer, Query, Master, DDStatus, MasterTw, Status
 
 
 class Tests(IsolatedAsyncioTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.test_player = ["ByFox", "Cor", "Freezestyler", "<BµmM>", "Aoe"]
+        self.test_player = ["ByFox", "Cor", "Freezestyler", "<BµmM>", "Aoe", "Gazebr", "ban+eblan"]
 
     async def test_dds_players(self):
         dds = DDstats()
@@ -46,7 +46,7 @@ class Tests(IsolatedAsyncioTestCase):
 
     async def test_query(self):
         dd = DDnetApi()
-        result = await dd.query("ByFo")
+        result = await dd.query("ByFox")
         self.assertIsInstance(result, Query)
         await dd.close()
 
@@ -54,6 +54,12 @@ class Tests(IsolatedAsyncioTestCase):
         dd = DDnetApi()
         result = await dd.status()
         self.assertIsInstance(result, DDStatus)
+        await dd.close()
+
+    async def test_status_server_list(self):
+        dd = Status()
+        result = await dd.server_list()
+        self.assertIsInstance(result, MasterTw)
         await dd.close()
 
 

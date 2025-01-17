@@ -1,12 +1,13 @@
 from typing import Union
 from urllib.parse import quote
 
-from .dataclass import DDPlayer, Master, Query, DMap, DDStatus, Player
+from .dataclass import DDPlayer, Master, Query, DMap, DDStatus, Player, MasterTw
 from .deflt import API
 
 __all__ = (
     "DDnetApi",
-    "DDstats"
+    "DDstats",
+    "Status"
 )
 
 
@@ -66,4 +67,22 @@ class DDstats(API):
         return await self._generate_model_instance(
             self.url.format(quote(player_name)),
             Player
+        )
+
+
+class Status(API): # TODO: Add other
+    def __init__(self):
+        super().__init__()
+        self.url = "https://api.status.tw"
+
+    @staticmethod
+    def powered() -> str:
+        return 'ddstats.tw'
+
+    async def server_list(self) -> MasterTw:
+        """Fetch player data from the API and return it as a dictionary."""
+        return await self._generate_model_instance(
+            self.url + "/server/list",
+            MasterTw,
+            "servers"
         )

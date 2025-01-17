@@ -1,5 +1,5 @@
 """the module is made for the convenience of users to download and use"""
-from .main import DDnetApi, DDstats
+from .main import DDnetApi, DDstats, Status
 from .dataclass import *
 
 __version__ = "0.6.0"
