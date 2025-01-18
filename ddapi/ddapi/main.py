@@ -70,7 +70,7 @@ class DDstats(API):
         )
 
 
-class Status(API):  # TODO: Add other
+class Status(API):
     def __init__(self):
         super().__init__()
         self.domain = 'status.tw'
@@ -160,4 +160,14 @@ class Status(API):  # TODO: Add other
         # https://api.status.tw/player/name/{name}/history
         raise NotImplementedError()
 
-    # TODO: STATS
+    async def stats(self) -> None:
+        # https://api.status.tw/stats
+        raise NotImplementedError()
+
+    async def stats_players(self, t: str) -> None:
+        # https://api.status.tw/stats/players/day week month
+        raise NotImplementedError()
+
+    async def stats_servers(self, t: str) -> None:
+        # https://api.status.tw/stats/servers/week month
+        raise NotImplementedError()
