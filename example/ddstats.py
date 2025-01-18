@@ -9,6 +9,7 @@ async def main():
     user = await obj.player(nickname)
     if user is not None:
         print(user)
+
     await obj.close()  # Closing client Not necessary
     assert isinstance(user, Player)
 

@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Union, Optional, TypeVar, Type, Any
+from typing import Optional, TypeVar, Type, Any
 
 import aiohttp
 from aiohttp import ClientSession, ClientConnectorError
@@ -14,20 +14,20 @@ class API(ABC):
             session: ClientSession = None,
             json_loads: Any = DEFAULT_JSON_DECODER
     ):
-        self.session = session
+        self.__session = session
         self.json_loads = json_loads
 
     @staticmethod
-    def powered() -> str:
-        """Return an empty string."""
-        return ''
+    def powered() -> None:
+        return None
 
-    async def _get(self, url: str) -> Union[dict, None]:
+    async def _get(self, url: str) -> Optional[dict]:
         """Send a GET request to the given URL and return the response as JSON."""
-        if self.session is None:
-            self.session = aiohttp.ClientSession()
+        if self.__session is None:
+            self.__session = aiohttp.ClientSession()
+
         try:
-            async with self.session.get(url) as req:
+            async with self.__session.get(url) as req:
                 if req.status == 200:
                     return await req.json(loads=self.json_loads)
                 return
@@ -38,7 +38,7 @@ class API(ABC):
             self,
             url: str,
             model: Type[ModelType],
-            k: str = None
+            k: Optional[str] = None
     ) -> Optional[ModelType]:
         """Generate a model instance from the given URL and optional keyword arguments.
 
@@ -54,11 +54,15 @@ class API(ABC):
         if dat is None or not dat:
             return
 
-        data_to_pass = {k: dat} if k else dat
+        data_to_pass = {k: dat} if k is not None else dat
         return model(**data_to_pass)
+
+    async def is_closed(self) -> bool:
+        """True is closed, False otherwise."""
+        return self.__session is None or self.__session.closed
 
     async def close(self) -> None:
         """Close the aiohttp session."""
-        if self.session:
-            await self.session.close()
-            self.session = None
+        if self.__session is not None:
+            await self.__session.close()
+        self.__session = None

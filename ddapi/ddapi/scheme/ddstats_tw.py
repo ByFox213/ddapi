@@ -261,6 +261,13 @@ class Server(BaseModel):
         return 0
 
 
+class CountServers(BaseModel):
+    name: str
+    address: str
+    game_type: str
+    count_clients: int
+
+
 class Master(BaseModel):
     servers: list[Server]
 
@@ -271,25 +278,37 @@ class Master(BaseModel):
         remove_list = rm_list.copy() if rm is None else rm
         if not self.servers:
             return []
+
         dat: Counter[Any] = Counter(
             client.clan
             for server in self.servers
             for client in server.info.clients
             if client != ''
         )
+
         for i in remove_list:
             del dat[i]
         return sorted(dat.items(), key=lambda x: x[1], reverse=True)
 
     @property
-    def count_servers(self) -> list:
+    def count_servers(self) -> list[CountServers]:
         return sorted(
             (
-                (i.count_client, i.addresses[0], i.info.game_type, i.info.name)
+                CountServers(
+                    count_clients=i.count_client,
+                    address=i.addresses[0],
+                    game_type=i.info.game_type,
+                    name=i.info.name
+                )
                 if isinstance(i.addresses, list)
-                else (i.count_client, i.addresses, i.info.game_type, i.info.name)
+                else CountServers(
+                    count_clients=i.count_client,
+                    address=i.addresses,
+                    game_type=i.info.game_type,
+                    name=i.info.name
+                )
                 for i in self.servers
-            ), key=lambda x: x[0], reverse=True)
+            ), key=lambda x: x.count_clients, reverse=True)
 
     @property
     def count_clients(self) -> int:

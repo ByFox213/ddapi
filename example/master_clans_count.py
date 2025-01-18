@@ -7,6 +7,7 @@ async def main():
     obj = DDnetApi()
     master: Master = await obj.master()
     print(master.get_clans()[:10])
+
     await obj.close()  # Closing client Not necessary
     assert isinstance(master, Master)
 
