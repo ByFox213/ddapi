@@ -1,8 +1,8 @@
 from typing import Union
 from urllib.parse import quote
 
-from .dataclass import DDPlayer, Master, Query, DMap, DDStatus, Player, MasterTw
 from .deflt import API
+from .scheme import DDPlayer, Master, Query, DMap, DDStatus, Player, MasterTw
 
 __all__ = (
     "DDnetApi",
@@ -18,7 +18,7 @@ class DDnetApi(API):
 
     @staticmethod
     def powered() -> str:
-        return 'ddnet.org'
+        return DDnetApi().domain
 
     async def player(self, player_name: str) -> DDPlayer:
         """Fetch player data from the API and return it as a dictionary."""
@@ -56,33 +56,33 @@ class DDnetApi(API):
 class DDstats(API):
     def __init__(self):
         super().__init__()
-        self.url = "https://ddstats.tw/player/json?player={0}"
+        self.domain = 'ddstats.tw'
 
     @staticmethod
     def powered() -> str:
-        return 'ddstats.tw'
+        return DDstats().domain
 
     async def player(self, player_name: str) -> Player:
         """Fetch player data from the API and return it as a dictionary."""
         return await self._generate_model_instance(
-            self.url.format(quote(player_name)),
+            f"https://{self.domain}/player/json?player={quote(player_name)}",
             Player
         )
 
 
-class Status(API): # TODO: Add other
+class Status(API):  # TODO: Add other
     def __init__(self):
         super().__init__()
-        self.url = "https://api.status.tw"
+        self.domain = 'status.tw'
 
     @staticmethod
     def powered() -> str:
-        return 'ddstats.tw'
+        return Status().domain
 
     async def server_list(self) -> MasterTw:
         """Fetch player data from the API and return it as a dictionary."""
         return await self._generate_model_instance(
-            self.url + "/server/list",
+            f"https://api.{self.domain}/server/list",
             MasterTw,
             "servers"
         )

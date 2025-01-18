@@ -12,6 +12,7 @@ or
 ## Usage/Examples
 
 DDnet
+
 ```python
 import asyncio
 from ddapi import DDnetApi, DDPlayer
@@ -34,7 +35,7 @@ asyncio.run(main())
 Tested on Python
 | 3.9 | 3.10 | 3.11 | 3.12 |
 |-----|------|------|------|
-| ?   | ?    |  ✅  | ?    |
+| ?   | ?    |  ✅  |  ✅  |
 
 
 [other examples](https://github.com/ByFox213/ddapi/tree/main/example)
