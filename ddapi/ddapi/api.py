@@ -28,9 +28,7 @@ class API(ABC):
 
         try:
             async with self.__session.get(url) as req:
-                if req.status == 200:
-                    return await req.json(loads=self.json_loads)
-                return
+                return await req.json(loads=self.json_loads) if req.status == 200 else None
         except ClientConnectorError:
             return
 
