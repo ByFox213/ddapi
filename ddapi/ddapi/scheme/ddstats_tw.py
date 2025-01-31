@@ -39,9 +39,9 @@ class PointG(BaseModel):
 class Profile(BaseModel):
     name: str
     points: int
-    clan: str
-    country: int
-    skin_name: str
+    clan: Optional[str]
+    country: Optional[int]
+    skin_name: Optional[str]
     skin_color_body: Optional[int] = None
     skin_color_feet: Optional[int] = None
 
