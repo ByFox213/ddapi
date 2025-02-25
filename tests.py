@@ -1,13 +1,13 @@
 from unittest import IsolatedAsyncioTestCase
 
 from ddapi import DDnetApi, DDstats, Player, DMap, DDPlayer, Query, Master, DDStatus, MasterTw, Status, ServerTwOne, \
-    ChartEnum, Charts
+    ChartEnum, Charts, QueryMapper, QueryMap, ReleasesMaps
 
 
 class Tests(IsolatedAsyncioTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.test_players = [
+        self._test_players = [
             "ByFox",
             "Cor",
             "Freezestyler",
@@ -19,20 +19,13 @@ class Tests(IsolatedAsyncioTestCase):
         self.ip = "45.141.57.22"
         self.port = 8303
 
-    async def test_dds_players(self):
-        dds = DDstats()
-        for player in self.test_players:
-            self.assertIsInstance(
-                await dds.player(player),
-                Player
-            )
-        await dds.close()
-
+    # DDnetApi
     async def test_players(self):
         dd = DDnetApi()
-        for player in self.test_players:
+        for player in self._test_players:
+            result = await dd.player(player)
             self.assertIsInstance(
-                await dd.player(player),
+                result,
                 DDPlayer
             )
         await dd.close()
@@ -61,6 +54,30 @@ class Tests(IsolatedAsyncioTestCase):
         )
         await dd.close()
 
+    async def test_query_map(self):
+        dd = DDnetApi()
+        self.assertIsInstance(
+            await dd.query_map("Equivalent"),
+            QueryMap
+        )
+        await dd.close()
+
+    async def test_releases_map(self):
+        dd = DDnetApi()
+        self.assertIsInstance(
+            await dd.releases_map(),
+            ReleasesMaps
+        )
+        await dd.close()
+
+    async def test_query_mapper(self):
+        dd = DDnetApi()
+        self.assertIsInstance(
+            await dd.query_mapper("Quix"),
+            QueryMapper
+        )
+        await dd.close()
+
     async def test_status(self):
         dd = DDnetApi()
         self.assertIsInstance(
@@ -69,6 +86,17 @@ class Tests(IsolatedAsyncioTestCase):
         )
         await dd.close()
 
+    # DDstats
+    async def test_dds_players(self):
+        dds = DDstats()
+        for player in self._test_players:
+            self.assertIsInstance(
+                await dds.player(player),
+                Player
+            )
+        await dds.close()
+
+    # Status
     async def test_status_server_list(self):
         dd = Status()
         self.assertIsInstance(

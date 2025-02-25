@@ -2,6 +2,6 @@
 from .main import DDnetApi, DDstats, Status
 from .scheme import *
 
-__version__ = "0.8.0"
+__version__ = "0.9.0"
 __author__ = 'ByFox'
 __LICENSE__ = "MIT"

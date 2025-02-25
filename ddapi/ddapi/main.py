@@ -1,14 +1,23 @@
+from enum import StrEnum
 from typing import Union
 from urllib.parse import quote
 
 from .api import API
-from .scheme import DDPlayer, Master, Query, DMap, DDStatus, Player, MasterTw, ServerTwOne, ChartEnum, Charts
+from .scheme import DDPlayer, Master, Query, DMap, DDStatus, Player, MasterTw, ServerTwOne, ChartEnum, Charts, \
+    QueryMapper, QueryMap, ReleasesMaps
 
 __all__ = (
     "DDnetApi",
     "DDstats",
     "Status"
 )
+
+
+class MasterEnum(StrEnum):
+    master1 = "master1"
+    master2 = "master2"
+    master3 = "master3"
+    master4 = "master4"
 
 
 class DDnetApi(API):
@@ -20,33 +29,54 @@ class DDnetApi(API):
     def powered() -> str:
         return DDnetApi().domain
 
-    async def player(self, player_name: str) -> DDPlayer:
+    async def player(self, player: str) -> DDPlayer:
         """Fetch player data from the API and return it as a dictionary."""
         return await self._generate_model_instance(
-            f"https://{self.domain}/players/?json2={quote(player_name)}",
+            f"https://{self.domain}/players/?json2={quote(player)}",
             DDPlayer
         )
 
-    async def status(self) -> Union[DDStatus, None]:
+    async def status(self) -> DDStatus:
         return await self._generate_model_instance(
             f"https://{self.domain}/status/json/stats.json",
             DDStatus
         )
 
-    async def query(self, player: str) -> Union[Query, None]:
+    async def releases_map(self) -> ReleasesMaps:
+        return await self._generate_model_instance(
+            f"https://{self.domain}/releases/maps.json",
+            ReleasesMaps,
+            "maps"
+        )
+
+    async def query(self, player: str) -> Query:
         return await self._generate_model_instance(
             f"https://{self.domain}/players/?query={quote(player)}",
             Query,
-            "data"
+            "players"
         )
 
-    async def master(self) -> Union[Master, None]:
+    async def query_map(self, map_name: str) -> QueryMap:
         return await self._generate_model_instance(
-            f"https://master1.{self.domain}/ddnet/15/servers.json",
+            f"https://{self.domain}/maps/?query={quote(map_name)}",
+            QueryMap,
+            'maps',
+        )
+
+    async def query_mapper(self, player: str) -> QueryMapper:
+        return await self._generate_model_instance(
+            f"https://{self.domain}/maps/?qmapper={quote(player)}",
+            QueryMapper,
+            'players',
+        )
+
+    async def master(self, master: MasterEnum = MasterEnum.master1) -> Master:
+        return await self._generate_model_instance(
+            f"https://{master}.{self.domain}/ddnet/15/servers.json",
             Master
         )
 
-    async def map(self, map_name: str) -> Union[DMap, None]:
+    async def map(self, map_name: str) -> DMap:
         return await self._generate_model_instance(
             f"https://{self.domain}/maps/?json={quote(map_name)}",
             DMap
