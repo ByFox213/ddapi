@@ -1,10 +1,7 @@
-from enum import StrEnum
-from typing import Union
 from urllib.parse import quote
 
 from .api import API
-from .scheme import DDPlayer, Master, Query, DMap, DDStatus, Player, MasterTw, ServerTwOne, ChartEnum, Charts, \
-    QueryMapper, QueryMap, ReleasesMaps
+from .scheme import *
 
 __all__ = (
     "DDnetApi",
@@ -109,37 +106,57 @@ class Status(API):
     def powered() -> str:
         return Status().domain
 
-    async def info(self) -> None:
-        # https://api.status.tw/info
-        raise NotImplementedError()
+    async def info(self) -> Info:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/info",
+            Info
+        )
 
-    async def master_bans(self) -> None:
-        # https://api.status.tw/master/bans/list
-        raise NotImplementedError()
+    async def master_bans(self) -> BannedMaster:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/master/bans/list",
+            BannedMaster,
+            "servers"
+        )
 
-    async def map_list(self) -> None:
-        # https://api.status.tw/map/list
-        raise NotImplementedError()
+    async def map_list(self) -> List:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/map/list",
+            List,
+            "data"
+        )
 
-    async def map(self, name: str) -> None:
-        # https://api.status.tw/map/name/{name}
-        raise NotImplementedError()
+    async def map(self, name: str) -> ListData:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/map/name/{quote(name)}",
+            ListData
+        )
 
-    async def gametype_list(self) -> None:
-        # https://api.status.tw/gametype/list
-        raise NotImplementedError()
+    async def gametype_list(self) -> List:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/gametype/list",
+            List,
+            "data"
+        )
 
-    async def gametype(self, name: str) -> None:
-        # https://api.status.tw/gametype/name/{name}
-        raise NotImplementedError()
+    async def gametype(self, name: str) -> ListData:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/gametype/name/{quote(name)}",
+            ListData
+        )
 
-    async def version_list(self) -> None:
-        # https://api.status.tw/version/list
-        raise NotImplementedError()
+    async def version_list(self) -> List:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/version/list",
+            List,
+            "data"
+        )
 
-    async def version(self, name: str) -> None:
-        # https://api.status.tw/version/name/{name}
-        raise NotImplementedError()
+    async def version(self, name: str) -> ListData:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/version/name/{quote(name)}",
+            ListData
+        )
 
     async def server_list(self) -> MasterTw:
         """Fetch player data from the API and return it as a dictionary."""
@@ -149,55 +166,67 @@ class Status(API):
             "servers"
         )
 
-    async def server(self, ip: str, port: Union[int, str]) -> ServerTwOne:
+    async def server(self, ip: str, port: int | str) -> ServerTwOne:
         return await self._generate_model_instance(
             f"https://api.{self.domain}/server/{quote(ip)}/{port}",
             ServerTwOne,
         )
 
-    async def server_charts(self, ip: str, port: Union[int, str], chart: ChartEnum = ChartEnum.day) -> Charts:
+    async def server_charts(self, ip: str, port: int | str, chart: ChartEnum = ChartEnum.day) -> Charts:
         return await self._generate_model_instance(
             f"https://api.{self.domain}/server/{quote(ip)}/{port}/chart/{chart}",
             Charts,
             "charts"
         )
 
-    async def server_history(self, ip: str, port: Union[int, str]) -> None:
+    async def server_history(self, ip: str, port: int | str) -> None:
         # https://api.status.tw/server/{ip}/{port}/history
         raise NotImplementedError()
 
-    async def server_stats(self, ip: str, port: Union[int, str]) -> None:
+    async def server_stats(self, ip: str, port: int | str) -> None:
         # https://api.status.tw/server/{ip}/{port}/stats
         raise NotImplementedError()
 
-    async def clan_list(self) -> None:
-        # https://api.status.tw/clan/list
-        raise NotImplementedError()
+    async def clan_list(self) -> ListPl:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/clan/list",
+            ListPl,
+            "data"
+        )
 
-    async def clan(self, name: str) -> None:
-        # https://api.status.tw/clan/name/{name}
-        raise NotImplementedError()
+    async def clan(self, name: str) -> ListPlData:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/clan/name/{quote(name)}",
+            ListPlData
+        )
 
-    async def player_list(self) -> None:
-        # https://api.status.tw/player/list
-        raise NotImplementedError()
+    async def player_list(self) -> ListPl:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/player/list",
+            ListPl,
+            "data"
+        )
 
-    async def player(self, name: str) -> None:
-        # https://api.status.tw/player/name/{name}
-        raise NotImplementedError()
+    async def player(self, name: str) -> ListPlData:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/player/name/{quote(name)}",
+            ListPlData
+        )
 
     async def player_history(self, name: str) -> None:
         # https://api.status.tw/player/name/{name}/history
         raise NotImplementedError()
 
-    async def stats(self) -> None:
-        # https://api.status.tw/stats
-        raise NotImplementedError()
+    async def stats(self) -> Stats:
+        return await self._generate_model_instance(
+            f"https://api.{self.domain}/stats",
+            Stats
+        )
 
     async def stats_players(self, t: str) -> None:
-        # https://api.status.tw/stats/players/day week month
+        # https://api.status.tw/stats/players/day | week | month
         raise NotImplementedError()
 
     async def stats_servers(self, t: str) -> None:
-        # https://api.status.tw/stats/servers/week month
+        # https://api.status.tw/stats/servers/week | month
         raise NotImplementedError()

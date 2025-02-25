@@ -1,7 +1,7 @@
 from unittest import IsolatedAsyncioTestCase
 
 from ddapi import DDnetApi, DDstats, Player, DMap, DDPlayer, Query, Master, DDStatus, MasterTw, Status, ServerTwOne, \
-    ChartEnum, Charts, QueryMapper, QueryMap, ReleasesMaps
+    ChartEnum, Charts, QueryMapper, QueryMap, ReleasesMaps, Info, BannedMaster, List, ListData, ListPl, ListPlData
 
 
 class Tests(IsolatedAsyncioTestCase):
@@ -102,6 +102,102 @@ class Tests(IsolatedAsyncioTestCase):
         self.assertIsInstance(
             await dd.server_list(),
             MasterTw
+        )
+        await dd.close()
+
+    async def test_status_info(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.info(),
+            Info
+        )
+        await dd.close()
+
+    async def test_status_master_bans(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.master_bans(),
+            BannedMaster
+        )
+        await dd.close()
+
+    async def test_status_map_list(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.map_list(),
+            List
+        )
+        await dd.close()
+
+    async def test_status_map(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.map("Baby Aim 1.0"),
+            ListData
+        )
+        await dd.close()
+
+    async def test_status_gametype_list(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.gametype_list(),
+            List
+        )
+        await dd.close()
+
+    async def test_status_gametype(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.gametype("DDraceNetwork"),
+            ListData
+        )
+        await dd.close()
+
+    async def test_status_version_list(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.version_list(),
+            List
+        )
+        await dd.close()
+
+    async def test_status_version(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.version("0.6.4, 19.1"),
+            ListData
+        )
+        await dd.close()
+
+    async def test_status_player_list(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.player_list(),
+            ListPl
+        )
+        await dd.close()
+
+    async def test_status_player(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.player("ByFox"),
+            ListPlData
+        )
+        await dd.close()
+
+    async def test_status_clan_list(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.clan_list(),
+            List
+        )
+        await dd.close()
+
+    async def test_status_clan(self):
+        dd = Status()
+        self.assertIsInstance(
+            await dd.clan("63 turtles"),
+            ListData
         )
         await dd.close()
 

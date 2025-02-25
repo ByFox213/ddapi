@@ -37,6 +37,7 @@ class ClientTw(BaseModel):
     team: int
     createdAt: datetime
     clan: DataTw | None
+    server: "ServerTw" = None
 
 
 class ServerTw(BaseModel):
@@ -82,3 +83,49 @@ class Charts(BaseModel):
 
 class MasterTw(BaseModel):
     servers: list[ServerTw]
+
+
+class Info(BaseModel):
+    app: str
+    version: str
+
+
+class BannedMasterData(BaseModel):
+    ip: str
+    isActive: bool
+    reason: str | None
+    unbanDate: datetime | None
+    createdAt: datetime
+
+
+class BannedMaster(BaseModel):
+    servers: list[BannedMasterData]
+
+
+class ListData(BaseModel):
+    name: str
+    createdAt: datetime
+    servers: list[ServerTw]
+
+
+class List(BaseModel):
+    data: list[ListData]
+
+
+class ListPlData(BaseModel):
+    name: str
+    createdAt: datetime
+    players: list[ClientTw]
+
+
+class ListPl(BaseModel):
+    data: list[ListPlData]
+
+
+class Stats(BaseModel):
+    numPlayers: int
+    numClans: int
+    numServers: int
+    numMaps: int
+    numGameTypes: int
+    numVersions: int
