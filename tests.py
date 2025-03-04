@@ -94,6 +94,7 @@ class Tests(IsolatedAsyncioTestCase):
                 await dds.player(player),
                 Player
             )
+            print(player)
         await dds.close()
 
     # Status
