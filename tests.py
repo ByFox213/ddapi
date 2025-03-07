@@ -94,7 +94,6 @@ class Tests(IsolatedAsyncioTestCase):
                 await dds.player(player),
                 Player
             )
-            print(player)
         await dds.close()
 
     # Status
@@ -190,7 +189,7 @@ class Tests(IsolatedAsyncioTestCase):
         dd = Status()
         self.assertIsInstance(
             await dd.clan_list(),
-            List
+            ListPl
         )
         await dd.close()
 
@@ -198,7 +197,7 @@ class Tests(IsolatedAsyncioTestCase):
         dd = Status()
         self.assertIsInstance(
             await dd.clan("63 turtles"),
-            ListData
+            ListPlData
         )
         await dd.close()
 

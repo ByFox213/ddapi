@@ -168,13 +168,13 @@ class Community(BaseModel):
 
 
 class Info(BaseModel):
-    max_clients: int
-    max_players: int
-    passworded: bool
-    game_type: str
-    name: str
-    map: Map
-    version: str
+    max_clients: int = None
+    max_players: int = None
+    passworded: bool = None
+    game_type: str = None
+    name: str = None
+    map: Map = None
+    version: str = None
     clients: Optional[list[Client]] = None
     requires_login: Optional[bool] = None
     community: Optional[Community] = None
