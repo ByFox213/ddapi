@@ -199,7 +199,7 @@ class Player(BaseModel):
     most_played_categories: Optional[list[MostPlayed]] = None
     most_played_locations: Optional[list[MostPlayed]] = None
     playtime_per_month: list[PlaytimePerMonth]
-    general_activity: GeneralActivity
+    general_activity: Optional[GeneralActivity] = None
     favourite_rank1s_teammates: Optional[list[FavouriteRank1sTeammates]] = None
     all_top_10s: Optional[list[AllTop10s]] = None
     recent_top_10s: Optional[list[RecentTop10s]] = None
