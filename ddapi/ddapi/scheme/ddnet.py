@@ -297,3 +297,29 @@ class QueryMapData(BaseModel):
 
 class QueryMap(BaseModel):
     maps: list[QueryMapData]
+
+
+class DDStatusData(BaseModel):
+    name: str = None
+    type: str = None
+    host: str = None
+    location: str = None
+    online4: bool = None
+    online6: bool = None
+    uptime: str = None
+    load: float = None
+    network_rx: int = None
+    network_tx: int = None
+    packets_rx: int = None
+    packets_tx: int = None
+    cpu: int = None
+    memory_total: int = None
+    memory_used: int = None
+    swap_total: int = None
+    swap_used: int = None
+    hdd_total: int = None
+    hdd_used: int = None
+
+
+class DDStatus(BaseModel):
+    servers: list[DDStatusData]

@@ -4,6 +4,7 @@ from .api import API
 from .scheme import *
 
 __all__ = (
+    "MasterEnum",
     "DDnetApi",
     "DDstats",
     "Status"
@@ -88,6 +89,26 @@ class DDstats(API):
     @staticmethod
     def powered() -> str:
         return DDstats().domain
+
+    async def profile(self, player_name: str) -> DProfile:
+        return await self._generate_model_instance(
+            f"https://{self.domain}/profile/json?player={quote(player_name)}",
+            DProfile,
+            "profile"
+        )
+
+    async def map(self, map_name: str) -> SMap:
+        return await self._generate_model_instance(
+            f"https://ddstats.tw/map/json?map={quote(map_name)}",
+            SMap
+        )
+
+    async def maps(self) -> Maps:
+        return await self._generate_model_instance(
+            f"https://{self.domain}/maps/json",
+            Maps,
+            "maps"
+        )
 
     async def player(self, player_name: str) -> Player:
         """Fetch player data from the API and return it as a dictionary."""
@@ -180,11 +201,11 @@ class Status(API):
         )
 
     async def server_history(self, ip: str, port: int | str) -> None:
-        # https://api.status.tw/server/{ip}/{port}/history
+        # TODO: https://api.status.tw/server/{ip}/{port}/history
         raise NotImplementedError()
 
     async def server_stats(self, ip: str, port: int | str) -> None:
-        # https://api.status.tw/server/{ip}/{port}/stats
+        # TODO: https://api.status.tw/server/{ip}/{port}/stats
         raise NotImplementedError()
 
     async def clan_list(self) -> ListPl:
@@ -214,7 +235,7 @@ class Status(API):
         )
 
     async def player_history(self, name: str) -> None:
-        # https://api.status.tw/player/name/{name}/history
+        # TODO:  https://api.status.tw/player/name/{name}/history
         raise NotImplementedError()
 
     async def stats(self) -> Stats:
@@ -224,9 +245,9 @@ class Status(API):
         )
 
     async def stats_players(self, t: str) -> None:
-        # https://api.status.tw/stats/players/day | week | month
+        # TODO: https://api.status.tw/stats/players/day | week | month
         raise NotImplementedError()
 
     async def stats_servers(self, t: str) -> None:
-        # https://api.status.tw/stats/servers/week | month
+        # TODO:  https://api.status.tw/stats/servers/week | month
         raise NotImplementedError()

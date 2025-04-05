@@ -45,6 +45,10 @@ class Profile(BaseModel):
     skin_color_feet: Optional[int] = None
 
 
+class DProfile(BaseModel):
+    profile: Profile
+
+
 class DDMap(BaseModel):
     map: str
     server: str
@@ -173,7 +177,7 @@ class RecentTop10s(BaseModel):
     map: str
     time: float
     rank: int
-    timestamp: Optional[datetime]
+    timestamp: Optional[datetime] = None
     server: str
 
 
@@ -205,27 +209,74 @@ class Player(BaseModel):
     recent_top_10s: Optional[list[RecentTop10s]] = None
 
 
-class DDStatusData(BaseModel):
-    name: str = None
-    type: str = None
-    host: str = None
-    location: str = None
-    online4: bool = None
-    online6: bool = None
-    uptime: str = None
-    load: float = None
-    network_rx: int = None
-    network_tx: int = None
-    packets_rx: int = None
-    packets_tx: int = None
-    cpu: int = None
-    memory_total: int = None
-    memory_used: int = None
-    swap_total: int = None
-    swap_used: int = None
-    hdd_total: int = None
-    hdd_used: int = None
+class Maps(BaseModel):
+    maps: list[DDMap]
 
 
-class DDStatus(BaseModel):
-    servers: list[DDStatusData]
+class InfoSMap(BaseModel):
+    map: DDMap
+    finishes: int
+    finishes_rank: int
+    median_time: float
+
+
+class RankingSMap(BaseModel):
+    rank: int
+    timestamp: Optional[datetime] = None
+    name: str
+    time: float
+    map: str
+    server: str
+
+
+class TeamRankingSMap(BaseModel):
+    rank: int
+    timestamp: Optional[datetime] = None
+    id: list[int]
+    players: list[str]
+    time: float
+    map: str
+    server: str
+
+
+class TimeCpsSMap(BaseModel):
+    name: str
+    cp1: float
+    cp2: float
+    cp3: float
+    cp4: float
+    cp5: float
+    cp6: float
+    cp7: float
+    cp8: float
+    cp9: float
+    cp10: float
+    cp11: float
+    cp12: float
+    cp13: float
+    cp14: float
+    cp15: float
+    cp16: float
+    cp17: float
+    cp18: float
+    cp19: float
+    cp20: float
+    cp21: float
+    cp22: float
+    cp23: float
+    cp24: float
+    cp25: float
+    time: float
+
+
+class PlaytimeSMap(BaseModel):
+    name: str
+    seconds_played: int
+
+
+class SMap(BaseModel):
+    info: InfoSMap
+    rankings: list[RankingSMap]
+    team_rankings: list[TeamRankingSMap]
+    time_cps: list[TimeCpsSMap]
+    playtime: list[PlaytimeSMap]
