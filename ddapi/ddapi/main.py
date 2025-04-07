@@ -12,16 +12,16 @@ __all__ = (
 
 
 class MasterEnum(StrEnum):
-    master1 = "master1"
-    master2 = "master2"
-    master3 = "master3"
-    master4 = "master4"
+    master1 = "1"
+    master2 = "2"
+    master3 = "3"
+    master4 = "4"
 
 
 class DDnetApi(API):
-    def __init__(self):
-        super().__init__()
-        self.domain = "ddnet.org"
+    @property
+    def domain(self) -> str:
+        return "ddnet.org"
 
     @staticmethod
     def powered() -> str:
@@ -68,9 +68,9 @@ class DDnetApi(API):
             'players',
         )
 
-    async def master(self, master: MasterEnum = MasterEnum.master1) -> Master:
+    async def master(self, number: MasterEnum = MasterEnum.master1) -> Master:
         return await self._generate_model_instance(
-            f"https://{master}.{self.domain}/ddnet/15/servers.json",
+            f"https://master{number}.{self.domain}/ddnet/15/servers.json",
             Master
         )
 
@@ -82,9 +82,9 @@ class DDnetApi(API):
 
 
 class DDstats(API):
-    def __init__(self):
-        super().__init__()
-        self.domain = 'ddstats.tw'
+    @property
+    def domain(self) -> str:
+        return 'ddstats.tw'
 
     @staticmethod
     def powered() -> str:
@@ -99,7 +99,7 @@ class DDstats(API):
 
     async def map(self, map_name: str) -> SMap:
         return await self._generate_model_instance(
-            f"https://ddstats.tw/map/json?map={quote(map_name)}",
+            f"https://{self.domain}/map/json?map={quote(map_name)}",
             SMap
         )
 
@@ -119,9 +119,9 @@ class DDstats(API):
 
 
 class Status(API):
-    def __init__(self):
-        super().__init__()
-        self.domain = 'status.tw'
+    @property
+    def domain(self) -> str:
+        return 'status.tw'
 
     @staticmethod
     def powered() -> str:
