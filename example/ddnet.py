@@ -4,16 +4,14 @@ from ddapi import DDnetApi, DDPlayer
 
 
 async def main():
-    obj = DDnetApi()
-    nickname = "Cor"
-    user: DDPlayer = await obj.player(nickname)
-    if user is None:
-        await obj.close()
-        return "Player not found"
-    
-    print(f"{user.player}: {user.points.points} / {user.points.total}")
-    await obj.close()  # Closing client Not necessary
-    assert isinstance(user, DDPlayer)
+    async with DDnetApi() as obj:
+        user: DDPlayer = await obj.player("Cor")
+    if user is not None:
+        text = f"{user.player}: {user.points.points}/{user.points.total}"
+        percent = round(user.points.total / user.points.points * 100)
+        print(f"{text}({percent}%)")
+    else:
+        print("Player not found")
 
 
 asyncio.run(main())

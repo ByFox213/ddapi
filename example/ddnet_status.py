@@ -4,14 +4,14 @@ from ddapi import DDnetApi
 
 
 async def main():
-    obj = DDnetApi()
-    status = await obj.status()
-    if status is None:
-        return await obj.close()
-
-    status = status.servers[0]
-    print(f"{status.name}. cpu: {status.cpu}")
-    await obj.close()  # Closing client Not necessary
+    async with DDnetApi() as obj:
+        status = await obj.status()
+    if status is not None:
+        for server in status.servers:
+            percent = round(server.memory_used / server.memory_total * 100, 2)
+            print(f"{server.name}. cpu: {server.cpu} | memory: {percent}%")
+    else:
+        print("Error response")
 
 
 asyncio.run(main())
