@@ -5,7 +5,9 @@ from typing import Optional, Any
 
 from pydantic import BaseModel, Field
 
-rm_list = ["DD-Persian", "/vDQMHSss8W", '']
+from .base import DDType
+
+rm_list = ["DD-Persian", "/vDQMHSss8W", ""]
 
 
 class DPoints(BaseModel):
@@ -92,22 +94,6 @@ class DData(BaseModel):
     team_rank: Optional[DRank] = Field(default=None)
     rank: Optional[DRank] = Field(default=None)
     maps: Optional[dict] = Field(default=None)
-
-
-class DDType(BaseModel):
-    Novice: Optional[DData] = None
-    Moderate: Optional[DData] = None
-    Brutal: Optional[DData] = None
-    Insane: Optional[DData] = None
-    Dummy: Optional[DData] = None
-    DDmaX_Easy: Optional[DData] = Field(default=None, validation_alias='DDmaX.Easy')
-    DDmaX_Next: Optional[DData] = Field(default=None, validation_alias='DDmaX.Next')
-    DDmaX_Nut: Optional[DData] = Field(default=None, validation_alias='DDmaX.Nut')
-    DDmaX_Pro: Optional[DData] = Field(default=None, validation_alias='DDmaX.Pro')
-    Oldschool: Optional[DData] = Field(default=None)
-    Race: Optional[DData] = None
-    Solo: Optional[DData] = None
-    total: Optional[DData] = None
 
 
 class Activity(BaseModel):
@@ -220,7 +206,7 @@ class Master(BaseModel):
             client.clan
             for server in self.servers
             for client in server.info.clients
-            if client != ''
+            if client != ""
         )
 
         for i in remove_list:

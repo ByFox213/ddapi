@@ -4,28 +4,12 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-rm_list = ["DD-Persian", "/vDQMHSss8W", '']
+from .base import DDType
 
 
 class PData(BaseModel):
     rank: int
     points: int
-
-
-class PPoints(BaseModel):
-    Novice: Optional[PData] = None
-    Moderate: Optional[PData] = None
-    Brutal: Optional[PData] = None
-    Insane: Optional[PData] = None
-    Dummy: Optional[PData] = None
-    DDmaX_Easy: Optional[PData] = Field(default=None, validation_alias='DDmaX.Easy')
-    DDmaX_Next: Optional[PData] = Field(default=None, validation_alias='DDmaX.Next')
-    DDmaX_Nut: Optional[PData] = Field(default=None, validation_alias='DDmaX.Nut')
-    DDmaX_Pro: Optional[PData] = Field(default=None, validation_alias='DDmaX.Pro')
-    Oldschool: Optional[PData] = None
-    Race: Optional[PData] = None
-    Solo: Optional[PData] = None
-    total: Optional[PData] = None
 
 
 class PointG(BaseModel):
@@ -117,9 +101,9 @@ class Points(BaseModel):
     weekly_points: Optional[PData] = None
     monthly_points: Optional[PData] = None
     yearly_points: Optional[PData] = None
-    points: PPoints
-    rank_points: PPoints
-    team_points: PPoints
+    points: DDType
+    rank_points: DDType
+    team_points: DDType
 
 
 class RecentActivity(BaseModel):

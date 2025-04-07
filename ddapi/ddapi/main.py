@@ -1,7 +1,10 @@
+from enum import StrEnum
 from urllib.parse import quote
 
 from .api import API
-from .scheme import *
+from .scheme import DDPlayer, DDStatus, ReleasesMaps, Query, QueryMap, QueryMapper, \
+    Master, DMap, DProfile, SMap, Maps, Player, Info, BannedMaster, List, ListData, \
+    ListPl, ListPlData, MasterTw, ServerTwOne, Charts, ChartEnum, Stats
 
 __all__ = (
     "MasterEnum",
@@ -58,14 +61,14 @@ class DDnetApi(API):
         return await self._generate_model_instance(
             f"https://{self.domain}/maps/?query={quote(map_name)}",
             QueryMap,
-            'maps',
+            "maps",
         )
 
     async def query_mapper(self, player: str) -> QueryMapper:
         return await self._generate_model_instance(
             f"https://{self.domain}/maps/?qmapper={quote(player)}",
             QueryMapper,
-            'players',
+            "players",
         )
 
     async def master(self, number: MasterEnum = MasterEnum.master1) -> Master:
@@ -84,7 +87,7 @@ class DDnetApi(API):
 class DDstats(API):
     @property
     def domain(self) -> str:
-        return 'ddstats.tw'
+        return "ddstats.tw"
 
     @staticmethod
     def powered() -> str:
@@ -121,7 +124,7 @@ class DDstats(API):
 class Status(API):
     @property
     def domain(self) -> str:
-        return 'status.tw'
+        return "status.tw"
 
     @staticmethod
     def powered() -> str:
@@ -193,7 +196,12 @@ class Status(API):
             ServerTwOne,
         )
 
-    async def server_charts(self, ip: str, port: int | str, chart: ChartEnum = ChartEnum.day) -> Charts:
+    async def server_charts(
+            self,
+            ip: str,
+            port: int | str,
+            chart: ChartEnum = ChartEnum.day
+    ) -> Charts:
         return await self._generate_model_instance(
             f"https://api.{self.domain}/server/{quote(ip)}/{port}/chart/{chart}",
             Charts,
