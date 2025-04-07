@@ -10,38 +10,37 @@ class DDstatsTests(IsolatedAsyncioTestCase):
         super().__init__(*args, **kwargs)
         self._test_players = test_players
         self.map = _map
+        self.obj = None
+
+    async def asyncSetUp(self):
+        self.obj = DDstats()
+
+    async def asyncTearDown(self):
+        await self.obj.close()
 
     # DDstats
     async def test_dds_players(self):
-        dds = DDstats()
         for player in self._test_players:
             self.assertIsInstance(
-                await dds.player(player),
+                await self.obj.player(player),
                 Player
             )
-        await dds.close()
 
     async def test_dds_maps(self):
-        dds = DDstats()
         self.assertIsInstance(
-            await dds.maps(),
+            await self.obj.maps(),
             Maps
         )
-        await dds.close()
 
     async def test_dds_map(self):
-        dds = DDstats()
         self.assertIsInstance(
-            await dds.map(self.map),
+            await self.obj.map(self.map),
             SMap
         )
-        await dds.close()
 
     async def test_dds_profile(self):
-        dds = DDstats()
         for player in self._test_players:
             self.assertIsInstance(
-                await dds.profile(player),
+                await self.obj.profile(player),
                 DProfile
             )
-        await dds.close()
