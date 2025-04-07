@@ -11,14 +11,10 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ByFox213/ddapi",
+    license="MIT",
     project_urls={
         "Github": "https://github.com/ByFox213/ddapi"
     },
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
     package_dir={"": "ddapi"},
     packages=setuptools.find_packages(where="ddapi"),
     python_requires=">=3.8"
