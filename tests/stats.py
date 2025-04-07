@@ -1,128 +1,17 @@
 from unittest import IsolatedAsyncioTestCase
 
-from ddapi import DDnetApi, DDstats, Player, DMap, DDPlayer, Query, Master, DDStatus, MasterTw, Status, ServerTwOne, \
-    ChartEnum, Charts, QueryMapper, QueryMap, ReleasesMaps, Info, BannedMaster, List, ListData, ListPl, ListPlData, \
-    Maps, DProfile, SMap
+from config import ip, port
+from ddapi import Status
+from ddapi.scheme.status_tw import MasterTw, Info, BannedMaster, List, ListData, ListPl, ListPlData, ServerTwOne, \
+    Charts, ChartEnum
 
 
-class Tests(IsolatedAsyncioTestCase):
+class StatsTests(IsolatedAsyncioTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._test_players = [
-            "ByFox",
-            "Cor",
-            "Freezestyler",
-            "<BµmM>",
-            "Aoe",
-            "Gazebr",
-            "ban+eblan"
-        ]
-        self.map = "Multeasymap"
-        self.ip = "45.141.57.22"
-        self.port = 8303
+        self.ip = ip
+        self.port = port
 
-    # DDnetApi
-    async def test_players(self):
-        dd = DDnetApi()
-        for player in self._test_players:
-            self.assertIsInstance(
-                await dd.player(player),
-                DDPlayer
-            )
-        await dd.close()
-
-    async def test_map(self):
-        dd = DDnetApi()
-        self.assertIsInstance(
-            await dd.map("Just Fly 1"),
-            DMap
-        )
-        await dd.close()
-
-    async def test_master(self):
-        dd = DDnetApi()
-        self.assertIsInstance(
-            await dd.master(),
-            Master
-        )
-        await dd.close()
-
-    async def test_query(self):
-        dd = DDnetApi()
-        self.assertIsInstance(
-            await dd.query("ByFox"),
-            Query
-        )
-        await dd.close()
-
-    async def test_query_map(self):
-        dd = DDnetApi()
-        self.assertIsInstance(
-            await dd.query_map("Equivalent"),
-            QueryMap
-        )
-        await dd.close()
-
-    async def test_releases_map(self):
-        dd = DDnetApi()
-        self.assertIsInstance(
-            await dd.releases_map(),
-            ReleasesMaps
-        )
-        await dd.close()
-
-    async def test_query_mapper(self):
-        dd = DDnetApi()
-        self.assertIsInstance(
-            await dd.query_mapper("Quix"),
-            QueryMapper
-        )
-        await dd.close()
-
-    async def test_status(self):
-        dd = DDnetApi()
-        self.assertIsInstance(
-            await dd.status(),
-            DDStatus
-        )
-        await dd.close()
-
-    # DDstats
-    async def test_dds_players(self):
-        dds = DDstats()
-        for player in self._test_players:
-            self.assertIsInstance(
-                await dds.player(player),
-                Player
-            )
-        await dds.close()
-
-    async def test_dds_maps(self):
-        dds = DDstats()
-        self.assertIsInstance(
-            await dds.maps(),
-            Maps
-        )
-        await dds.close()
-
-    async def test_dds_map(self):
-        dds = DDstats()
-        self.assertIsInstance(
-            await dds.map(self.map),
-            SMap
-        )
-        await dds.close()
-
-    async def test_dds_profile(self):
-        dds = DDstats()
-        for player in self._test_players:
-            self.assertIsInstance(
-                await dds.profile(player),
-                DProfile
-            )
-        await dds.close()
-
-    # Status
     async def test_status_server_list(self):
         dd = Status()
         self.assertIsInstance(
