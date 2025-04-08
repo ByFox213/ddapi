@@ -221,17 +221,20 @@ class Master(BaseModel):
                     count_clients=i.count_client,
                     address=i.addresses[0],
                     game_type=i.info.game_type,
-                    name=i.info.name
+                    name=i.info.name,
                 )
                 if isinstance(i.addresses, list)
                 else CountServers(
                     count_clients=i.count_client,
                     address=i.addresses,
                     game_type=i.info.game_type,
-                    name=i.info.name
+                    name=i.info.name,
                 )
                 for i in self.servers
-            ), key=lambda x: x.count_clients, reverse=True)
+            ),
+            key=lambda x: x.count_clients,
+            reverse=True,
+        )
 
     @property
     def count_clients(self) -> int:

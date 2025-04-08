@@ -17,10 +17,10 @@ except ImportError:
 
 class API(ABC):
     def __init__(
-            self,
-            session: ClientSession = None,
-            autoclose: bool = True,
-            json_loads: Any = DEFAULT_JSON_DECODER
+        self,
+        session: ClientSession = None,
+        autoclose: bool = True,
+        json_loads: Any = DEFAULT_JSON_DECODER,
     ):
         self.__session = session
         self.json_loads = json_loads
@@ -49,17 +49,10 @@ class API(ABC):
     async def _get(self, url: str) -> Optional[dict]:
         """Send a GET request to the given URL and return the response as JSON."""
         async with self.__session.get(url) as req:
-            return (
-                await req.json(loads=self.json_loads)
-                if req.status == 200
-                else None
-            )
+            return await req.json(loads=self.json_loads) if req.status == 200 else None
 
     async def _generate_model_instance(
-            self,
-            url: str,
-            model: Type[T],
-            k: Optional[str] = None
+        self, url: str, model: Type[T], k: Optional[str] = None
     ) -> Optional[T]:
         """Generate a model instance from the given URL and optional keyword arguments.
 
