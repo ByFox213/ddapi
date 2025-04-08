@@ -21,26 +21,14 @@ class DDstatsTests(IsolatedAsyncioTestCase):
     # DDstats
     async def test_dds_players(self):
         for player in self._test_players:
-            self.assertIsInstance(
-                await self.obj.player(player),
-                Player
-            )
+            self.assertIsInstance(await self.obj.player(player), Player)
 
     async def test_dds_maps(self):
-        self.assertIsInstance(
-            await self.obj.maps(),
-            Maps
-        )
+        self.assertIsInstance(await self.obj.maps(), Maps)
 
     async def test_dds_map(self):
-        self.assertIsInstance(
-            await self.obj.map(self.map),
-            SMap
-        )
+        self.assertIsInstance(await self.obj.map(self.map), SMap)
 
     async def test_dds_profile(self):
         for player in self._test_players:
-            self.assertIsInstance(
-                await self.obj.profile(player),
-                DProfile
-            )
+            self.assertIsInstance(await self.obj.profile(player), DProfile)
