@@ -14,28 +14,28 @@ class ChartEnum(StrEnum):
 
 class DataTw(BaseModel):
     name: str
-    created_at: datetime = Field(serialization_alias="createdAt")
+    created_at: datetime = Field(alias="createdAt")
 
 
 class VersionTw(BaseModel):
     version: str
-    created_at: datetime = Field(serialization_alias="createdAt")
+    created_at: datetime = Field(alias="createdAt")
 
 
 class CountryTw(BaseModel):
     identifier: str
     code: int
-    icon_url: str = Field(serialization_alias="iconUrl")
+    icon_url: str = Field(alias="iconUrl")
 
 
 class ClientTw(BaseModel):
     name: str
     country: CountryTw
     score: int
-    is_player: bool = Field(serialization_alias="isPlayer")
-    is_afk: bool = Field(serialization_alias="isAfk")
+    is_player: bool = Field(alias="isPlayer")
+    is_afk: bool = Field(alias="isAfk")
     team: int
-    created_at: datetime = Field(serialization_alias="createdAt")
+    created_at: datetime = Field(alias="createdAt")
     clan: DataTw | None
     server: "ServerTw" = None
 
@@ -44,22 +44,22 @@ class ServerTw(BaseModel):
     ip: str
     port: int
     name: str
-    num_clients: int = Field(serialization_alias="numClients")
-    num_players: int = Field(serialization_alias="numPlayers")
-    max_clients: int = Field(serialization_alias="maxClients")
-    max_players: int = Field(serialization_alias="maxPlayers")
-    has_password: bool = Field(serialization_alias="hasPassword")
+    num_clients: int = Field(alias="numClients")
+    num_players: int = Field(alias="numPlayers")
+    max_clients: int = Field(alias="maxClients")
+    max_players: int = Field(alias="maxPlayers")
+    has_password: bool = Field(alias="hasPassword")
     supports6: bool
     supports7: bool
-    created_at: datetime = Field(serialization_alias="createdAt")
-    relevance_score: int = Field(serialization_alias="relevanceScore")
-    client_score_kind: str | None = Field(serialization_alias="clientScoreKind")
-    logo_url: str = Field(serialization_alias="logoUrl")
+    created_at: datetime = Field(alias="createdAt")
+    relevance_score: int = Field(alias="relevanceScore")
+    client_score_kind: str | None = Field(alias="clientScoreKind")
+    logo_url: str = Field(alias="logoUrl")
     map: DataTw
     website: Optional[str] = None
-    discord_invite: Optional[str] = Field(None, serialization_alias="discordInvite")
+    discord_invite: Optional[str] = Field(None, alias="discordInvite")
     description: Optional[str] = None
-    game_type: DataTw = Field(serialization_alias="gameType")
+    game_type: DataTw = Field(alias="gameType")
     version: VersionTw
     clients: list[ClientTw]
 
@@ -71,9 +71,9 @@ class ServerTwOne(BaseModel):
 
 
 class Chart(BaseModel):
-    avg_players: float = Field(serialization_alias="avgPlayers")
-    max_players: int = Field(serialization_alias="maxPlayers")
-    min_players: int = Field(serialization_alias="minPlayers")
+    avg_players: float = Field(alias="avgPlayers")
+    max_players: int = Field(alias="maxPlayers")
+    min_players: int = Field(alias="minPlayers")
     timestamp: datetime
 
 
@@ -92,10 +92,10 @@ class Info(BaseModel):
 
 class BannedMasterData(BaseModel):
     ip: str
-    is_active: bool = Field(serialization_alias="isActive")
+    is_active: bool = Field(alias="isActive")
     reason: str | None
-    unban_date: datetime | None = Field(serialization_alias="unbanDate")
-    created_at: datetime = Field(serialization_alias="createdAt")
+    unban_date: datetime | None = Field(alias="unbanDate")
+    created_at: datetime = Field(alias="createdAt")
 
 
 class BannedMaster(BaseModel):
@@ -104,7 +104,7 @@ class BannedMaster(BaseModel):
 
 class ListData(BaseModel):
     name: str
-    created_at: datetime = Field(serialization_alias="createdAt")
+    created_at: datetime = Field(alias="createdAt")
     servers: list[ServerTw]
 
 
@@ -114,7 +114,7 @@ class List(BaseModel):
 
 class ListPlData(BaseModel):
     name: str
-    created_at: datetime = Field(serialization_alias="createdAt")
+    created_at: datetime = Field(alias="createdAt")
     players: list[ClientTw]
 
 
@@ -123,9 +123,9 @@ class ListPl(BaseModel):
 
 
 class Stats(BaseModel):
-    num_players: int = Field(serialization_alias="numPlayers")
-    num_clans: int = Field(serialization_alias="numClans")
-    num_servers: int = Field(serialization_alias="numServers")
-    num_maps: int = Field(serialization_alias="numMaps")
-    num_game_types: int = Field(serialization_alias="numGameTypes")
-    num_versions: int = Field(serialization_alias="numVersions")
+    num_players: int = Field(alias="numPlayers")
+    num_clans: int = Field(alias="numClans")
+    num_servers: int = Field(alias="numServers")
+    num_maps: int = Field(alias="numMaps")
+    num_game_types: int = Field(alias="numGameTypes")
+    num_versions: int = Field(alias="numVersions")
