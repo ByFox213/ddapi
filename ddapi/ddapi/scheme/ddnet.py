@@ -5,15 +5,9 @@ from typing import Optional, Any
 
 from pydantic import BaseModel, Field
 
-from .base import DDType
+from .base import DRank, DDType, DPoints
 
 rm_list = ["DD-Persian", "/vDQMHSss8W", ""]
-
-
-class DPoints(BaseModel):
-    total: int
-    points: Optional[int] = Field(default=None)
-    rank: Optional[int] = Field(default=None)
 
 
 class MaxFinishes(BaseModel):
@@ -65,11 +59,6 @@ class DMap(BaseModel):
     max_finishes: list[MaxFinishes]
 
 
-class DRank(BaseModel):
-    points: Optional[int] = None
-    rank: Optional[int] = None
-
-
 class FirstFinish(BaseModel):
     timestamp: float
     map: str
@@ -87,13 +76,6 @@ class LastFinish(BaseModel):
 class FavoritePartner(BaseModel):
     name: str
     finishes: int
-
-
-class DData(BaseModel):
-    points: Optional[DPoints] = Field(default=None)
-    team_rank: Optional[DRank] = Field(default=None)
-    rank: Optional[DRank] = Field(default=None)
-    maps: Optional[dict] = Field(default=None)
 
 
 class Activity(BaseModel):

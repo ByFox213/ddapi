@@ -2,7 +2,23 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from ddapi import DData
+
+class DRank(BaseModel):
+    points: Optional[int] = None
+    rank: Optional[int] = None
+
+
+class DPoints(BaseModel):
+    total: int
+    points: Optional[int] = Field(default=None)
+    rank: Optional[int] = Field(default=None)
+
+
+class DData(BaseModel):
+    points: Optional[DPoints] = Field(default=None)
+    team_rank: Optional[DRank] = Field(default=None)
+    rank: Optional[DRank] = Field(default=None)
+    maps: Optional[dict] = Field(default=None)
 
 
 class DDType(BaseModel):
