@@ -1,8 +1,10 @@
 """the module is made for the convenience of users to download and use"""
 
-from .main import DDnetApi, DDstats, Status
+from .api import DDnetApi, DDstats, Status
+from .enum import MasterEnum
+from .cache import CacheABC, EmptyCache, MemoryCache
 from .scheme import *  # noqa: F403
 
-__version__ = "0.12.2"
+__version__ = "0.13.0"
 __author__ = "ByFox"
 __LICENSE__ = "MIT"

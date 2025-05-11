@@ -1,6 +1,6 @@
 from unittest import IsolatedAsyncioTestCase
 
-from config import ip, port
+from .config import ip, port
 from ddapi import Status
 from ddapi.scheme.status_tw import (
     MasterTw,

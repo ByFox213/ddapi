@@ -1,6 +1,6 @@
 from unittest import IsolatedAsyncioTestCase
 
-from config import test_players, _map
+from .config import test_players, _map
 from ddapi import DDnetApi
 from ddapi.scheme.ddnet import (
     DDPlayer,
