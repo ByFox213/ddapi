@@ -11,10 +11,9 @@ class MemoryCache(CacheABC):
 
     async def set(self, key: str, value: Any, timeout_seconds: int = None) -> bool:
         async with self._lock:
-            if timeout_seconds is None:
-                self._cache[key] = value
-                return True
-            asyncio.create_task(self._remove_after_timeout(key, timeout_seconds))
+            self._cache[key] = value
+            if timeout_seconds is not None:
+                asyncio.create_task(self._remove_after_timeout(key, timeout_seconds))
             return True
 
     async def delete(self, key: str) -> bool:
