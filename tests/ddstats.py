@@ -1,8 +1,12 @@
+import json
 from unittest import IsolatedAsyncioTestCase
 
+from .base import start_tests
 from .config import test_players, _map
 from ddapi import DDstats
 from ddapi.scheme.ddstats_tw import SMap, DProfile, Player, Maps
+
+start_tests()
 
 
 class DDstatsTests(IsolatedAsyncioTestCase):
@@ -13,10 +17,7 @@ class DDstatsTests(IsolatedAsyncioTestCase):
         self.obj = None
 
     async def asyncSetUp(self):
-        self.obj = DDstats()
-
-    async def asyncTearDown(self):
-        await self.obj.close()
+        self.obj = DDstats(json_loads=json.loads)
 
     # DDstats
     async def test_dds_players(self):

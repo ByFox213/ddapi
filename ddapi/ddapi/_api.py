@@ -1,4 +1,5 @@
 import asyncio
+import atexit
 import logging
 from abc import ABC
 from typing import Optional, Type, Any
@@ -18,6 +19,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class API(ABC):
     def __init__(
         self,
@@ -36,6 +38,8 @@ class API(ABC):
             self.__session = aiohttp.ClientSession()
             logger.debug("Created a new aiohttp ClientSession.")
 
+        atexit.register(self.close_api)
+
     async def __aenter__(self):
         if self.__session is None:
             self.__session = aiohttp.ClientSession()
@@ -46,16 +50,6 @@ class API(ABC):
         if self.autoclose:
             logger.debug("Closing aiohttp ClientSession on exit.")
             await self.close()
-
-    def __del__(self):
-        if self.__session is not None and not self.__session.closed:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                logger.warning("Closing aiohttp ClientSession in the background.")
-                loop.create_task(self.close())
-            else:
-                logger.warning("Closing aiohttp ClientSession synchronously.")
-                loop.run_until_complete(self.close())
 
     async def _get(self, url: str) -> Optional[dict]:
         """Send a GET request to the given URL and return the response as JSON."""
@@ -116,3 +110,6 @@ class API(ABC):
     @staticmethod
     def powered() -> None:
         return None
+
+    def close_api(self):
+        asyncio.run(self.close())

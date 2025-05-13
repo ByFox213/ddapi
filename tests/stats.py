@@ -1,5 +1,7 @@
+import json
 from unittest import IsolatedAsyncioTestCase
 
+from .base import start_tests
 from .config import ip, port
 from ddapi import Status
 from ddapi.scheme.status_tw import (
@@ -15,6 +17,8 @@ from ddapi.scheme.status_tw import (
     ChartEnum,
 )
 
+start_tests()
+
 
 class StatsTests(IsolatedAsyncioTestCase):
     def __init__(self, *args, **kwargs):
@@ -24,10 +28,7 @@ class StatsTests(IsolatedAsyncioTestCase):
         self.obj = None
 
     async def asyncSetUp(self):
-        self.obj = Status()
-
-    async def asyncTearDown(self):
-        await self.obj.close()
+        self.obj = Status(json_loads=json.loads)
 
     async def test_status_server_list(self):
         self.assertIsInstance(await self.obj.server_list(), MasterTw)

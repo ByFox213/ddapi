@@ -1,5 +1,7 @@
+import json
 from unittest import IsolatedAsyncioTestCase
 
+from .base import start_tests
 from .config import test_players, _map
 from ddapi import DDnetApi
 from ddapi.scheme.ddnet import (
@@ -13,6 +15,8 @@ from ddapi.scheme.ddnet import (
     DDStatus,
 )
 
+start_tests()
+
 
 class DDnetTests(IsolatedAsyncioTestCase):
     def __init__(self, *args, **kwargs):
@@ -22,10 +26,7 @@ class DDnetTests(IsolatedAsyncioTestCase):
         self.obj = None
 
     async def asyncSetUp(self):
-        self.obj = DDnetApi()
-
-    async def asyncTearDown(self):
-        await self.obj.close()
+        self.obj = DDnetApi(json_loads=json.loads)
 
     async def test_players(self):
         for player in self._test_players:

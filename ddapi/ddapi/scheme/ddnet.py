@@ -265,9 +265,9 @@ class ReleasesMapsData(BaseModel):
     difficulty: int
     mapper: str
     release: datetime | str
-    width: int
-    height: int
-    tiles: list[str]
+    width: int = None
+    height: int = None
+    tiles: list[str] = None
 
 
 class ReleasesMaps(BaseModel):
