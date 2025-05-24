@@ -235,7 +235,7 @@ class Maps(BaseModel):
 
     @staticmethod
     def api() -> str:
-        return f"https://ddstats.tw/maps/json"
+        return "https://ddstats.tw/maps/json"
 
 
 class InfoSMap(BaseModel):
