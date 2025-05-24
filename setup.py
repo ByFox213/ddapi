@@ -7,7 +7,7 @@ with Path.open(Path("README.md"), encoding="utf-8") as fh:
 
 setuptools.setup(
     name="ddapi",
-    version="0.14.0",
+    version="0.14.1",
     author="ByFox",
     description="DDnet api",
     long_description=long_description,

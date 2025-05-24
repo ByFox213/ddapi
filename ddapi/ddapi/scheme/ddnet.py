@@ -5,6 +5,7 @@ from urllib.parse import quote
 
 from pydantic import BaseModel, Field
 
+from ddapi import slugify2
 from ddapi.enum import MasterEnum
 
 rm_list = ["DD-Persian", "/vDQMHSss8W", ""]
@@ -93,11 +94,11 @@ class DMap(BaseModel):
     max_finishes: list[MaxFinishes]
 
     def url(self) -> str:
-        return f"https://ddnet.org/maps/{self.name}"
+        return f"https://ddnet.org/maps/{quote(slugify2(self.name))}"
 
     @staticmethod
     def url_with_name(map_name: str) -> str:
-        return f"https://ddnet.org/maps/{map_name}"
+        return f"https://ddnet.org/maps/{quote(slugify2(map_name))}"
 
     @staticmethod
     def api(map_name: str) -> str:
@@ -149,11 +150,11 @@ class DDPlayer(BaseModel):
     hours_played_past_365_days: int
 
     def url(self) -> str:
-        return f"https://ddnet.org/players/{self.player}"
+        return f"https://ddnet.org/players/{quote(slugify2(self.player))}"
 
     @staticmethod
     def url_with_name(player: str) -> str:
-        return f"https://ddnet.org/players/{player}"
+        return f"https://ddnet.org/players/{quote(slugify2(player))}"
 
     @staticmethod
     def api(player: str) -> str:
