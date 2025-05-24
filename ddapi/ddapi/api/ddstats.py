@@ -21,7 +21,11 @@ class DDstats(API):
         return DDstats().domain
 
     async def profile(self, player: str) -> DProfile:
-        return await self._generate_model_instance(DProfile.api(player), DProfile, "profile",)
+        return await self._generate_model_instance(
+            DProfile.api(player),
+            DProfile,
+            "profile",
+        )
 
     async def map(self, map_name: str) -> SMap:
         return await self._generate_model_instance(SMap.api(map_name), SMap)
