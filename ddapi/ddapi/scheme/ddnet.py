@@ -1,45 +1,47 @@
 # ddnet
 from collections import Counter
 from datetime import datetime
-from typing import Optional, Any
+from urllib.parse import quote
 
 from pydantic import BaseModel, Field
+
+from ddapi.enum import MasterEnum
 
 rm_list = ["DD-Persian", "/vDQMHSss8W", ""]
 
 
 class DRank(BaseModel):
-    points: Optional[int] = None
-    rank: Optional[int] = None
+    points: int | None = None
+    rank: int | None = None
 
 
 class DPoints(BaseModel):
     total: int
-    points: Optional[int] = Field(default=None)
-    rank: Optional[int] = Field(default=None)
+    points: int | None = Field(default=None)
+    rank: int | None = Field(default=None)
 
 
 class DData(BaseModel):
-    points: Optional[DPoints] = Field(default=None)
-    team_rank: Optional[DRank] = Field(default=None)
-    rank: Optional[DRank] = Field(default=None)
-    maps: Optional[dict] = Field(default=None)
+    points: DPoints | None = Field(default=None)
+    team_rank: DRank | None = Field(default=None)
+    rank: DRank | None = Field(default=None)
+    maps: dict | None = Field(default=None)
 
 
 class DDType(BaseModel):
-    Novice: Optional[DData] = None
-    Moderate: Optional[DData] = None
-    Brutal: Optional[DData] = None
-    Insane: Optional[DData] = None
-    Dummy: Optional[DData] = None
-    DDmaX_Easy: Optional[DData] = Field(default=None, validation_alias="DDmaX.Easy")
-    DDmaX_Next: Optional[DData] = Field(default=None, validation_alias="DDmaX.Next")
-    DDmaX_Nut: Optional[DData] = Field(default=None, validation_alias="DDmaX.Nut")
-    DDmaX_Pro: Optional[DData] = Field(default=None, validation_alias="DDmaX.Pro")
-    Oldschool: Optional[DData] = Field(default=None)
-    Race: Optional[DData] = None
-    Solo: Optional[DData] = None
-    total: Optional[DData] = None
+    Novice: DData | None = None
+    Moderate: DData | None = None
+    Brutal: DData | None = None
+    Insane: DData | None = None
+    Dummy: DData | None = None
+    DDmaX_Easy: DData | None = Field(default=None, validation_alias="DDmaX.Easy")
+    DDmaX_Next: DData | None = Field(default=None, validation_alias="DDmaX.Next")
+    DDmaX_Nut: DData | None = Field(default=None, validation_alias="DDmaX.Nut")
+    DDmaX_Pro: DData | None = Field(default=None, validation_alias="DDmaX.Pro")
+    Oldschool: DData | None = Field(default=None)
+    Race: DData | None = None
+    Solo: DData | None = None
+    total: DData | None = None
 
 
 class MaxFinishes(BaseModel):
@@ -76,7 +78,7 @@ class DMap(BaseModel):
     points: int
     difficulty: int
     mapper: str
-    release: Optional[int] = None
+    release: int | None = None
     median_time: float
     first_finish: int
     last_finish: int
@@ -90,6 +92,17 @@ class DMap(BaseModel):
     ranks: list[DDRanks]
     max_finishes: list[MaxFinishes]
 
+    def url(self) -> str:
+        return f"https://ddnet.org/maps/{self.name}"
+
+    @staticmethod
+    def url_with_name(map_name: str) -> str:
+        return f"https://ddnet.org/maps/{map_name}"
+
+    @staticmethod
+    def api(map_name: str) -> str:
+        return f"https://ddnet.org/maps/?json={quote(map_name)}"
+
 
 class FirstFinish(BaseModel):
     timestamp: float
@@ -102,7 +115,7 @@ class LastFinish(BaseModel):
     map: str
     time: float
     country: str
-    type: Optional[str] = None
+    type: str | None = None
 
 
 class FavoritePartner(BaseModel):
@@ -122,24 +135,35 @@ class FavoriteServer(BaseModel):
 class DDPlayer(BaseModel):
     player: str
     points: DPoints
-    team_rank: Optional[DRank] = None
-    rank: Optional[DRank] = None
-    points_last_year: Optional[DRank] = None
-    points_last_month: Optional[DRank] = None
-    points_last_week: Optional[DRank] = None
+    team_rank: DRank | None = None
+    rank: DRank | None = None
+    points_last_year: DRank | None = None
+    points_last_month: DRank | None = None
+    points_last_week: DRank | None = None
     favorite_server: FavoriteServer
     first_finish: FirstFinish
     last_finishes: list[LastFinish]
-    favorite_partners: Optional[list[FavoritePartner]] = None
+    favorite_partners: list[FavoritePartner] | None = None
     types: DDType
     activity: list[Activity]
     hours_played_past_365_days: int
 
+    def url(self) -> str:
+        return f"https://ddnet.org/players/{self.player}"
+
+    @staticmethod
+    def url_with_name(player: str) -> str:
+        return f"https://ddnet.org/players/{player}"
+
+    @staticmethod
+    def api(player: str) -> str:
+        return f"https://ddnet.org/players/?json2={quote(player)}"
+
 
 class Skin(BaseModel):
-    name: Optional[str] = None
-    color_body: Optional[int] = None
-    color_feet: Optional[int] = None
+    name: str | None = None
+    color_body: int | None = None
+    color_feet: int | None = None
 
 
 class Client(BaseModel):
@@ -147,24 +171,24 @@ class Client(BaseModel):
     clan: str
     country: int
     score: int
-    is_player: Optional[bool] = None
-    skin: Optional[Skin] = None
-    afk: Optional[bool] = None
-    team: Optional[int] = None
+    is_player: bool | None = None
+    skin: Skin | None = None
+    afk: bool | None = None
+    team: int | None = None
 
 
 class Map(BaseModel):
     name: str
-    sha256: Optional[str] = None
-    size: Optional[int] = None
+    sha256: str | None = None
+    size: int | None = None
 
 
 class Community(BaseModel):
     id: str
     icon: str
     admin: list[str]
-    public_key: Optional[str] = None
-    signature: Optional[str] = None
+    public_key: str | None = None
+    signature: str | None = None
 
 
 class Info(BaseModel):
@@ -175,9 +199,9 @@ class Info(BaseModel):
     name: str = None
     map: Map = None
     version: str = None
-    clients: Optional[list[Client]] = None
-    requires_login: Optional[bool] = None
-    community: Optional[Community] = None
+    clients: list[Client] | None = None
+    requires_login: bool | None = None
+    community: Community | None = None
 
     def __len__(self) -> int:
         return len(self.clients)
@@ -211,12 +235,14 @@ class Master(BaseModel):
     def __len__(self) -> int:
         return len(self.servers)
 
-    def get_clans(self, rm: list[str] = None) -> list[tuple[Any, int]]:
+    def get_clans(
+        self, rm: list[str] | None = None
+    ) -> list[str] | list[tuple[str, int]]:
         remove_list = rm_list.copy() if rm is None else rm
         if not self.servers:
             return []
 
-        dat: Counter[Any] = Counter(
+        dat: Counter[str] = Counter(
             client.clan
             for server in self.servers
             for client in server.info.clients
@@ -254,6 +280,10 @@ class Master(BaseModel):
     def count_clients(self) -> int:
         return sum(i.count_client for i in self.servers)
 
+    @staticmethod
+    def api(server: MasterEnum) -> str:
+        return f"https://master{server}.ddnet.org/ddnet/15/servers.json"
+
 
 class ReleasesMapsData(BaseModel):
     name: str
@@ -273,6 +303,14 @@ class ReleasesMapsData(BaseModel):
 class ReleasesMaps(BaseModel):
     maps: list[ReleasesMapsData]
 
+    @staticmethod
+    def url() -> str:
+        return "https://ddnet.org/releases"
+
+    @staticmethod
+    def api() -> str:
+        return "https://ddnet.org/releases/maps.json"
+
 
 class QueryData(BaseModel):
     points: int
@@ -281,6 +319,10 @@ class QueryData(BaseModel):
 
 class Query(BaseModel):
     players: list[QueryData]
+
+    @staticmethod
+    def api(player: str) -> str:
+        return f"https://ddnet.org/players/?query={quote(player)}"
 
 
 class QueryMapperData(BaseModel):
@@ -291,6 +333,10 @@ class QueryMapperData(BaseModel):
 class QueryMapper(BaseModel):
     players: list[QueryMapperData]
 
+    @staticmethod
+    def api(player: str) -> str:
+        return f"https://ddnet.org/maps/?qmapper={quote(player)}"
+
 
 class QueryMapData(BaseModel):
     name: str
@@ -300,6 +346,10 @@ class QueryMapData(BaseModel):
 
 class QueryMap(BaseModel):
     maps: list[QueryMapData]
+
+    @staticmethod
+    def api(map_name: str) -> str:
+        return f"https://ddnet.org/maps/?query={quote(map_name)}"
 
 
 class DDStatusData(BaseModel):
@@ -326,3 +376,11 @@ class DDStatusData(BaseModel):
 
 class DDStatus(BaseModel):
     servers: list[DDStatusData]
+
+    @staticmethod
+    def url() -> str:
+        return "https://ddnet.org/status"
+
+    @staticmethod
+    def api() -> str:
+        return "https://ddnet.org/status/json/stats.json"

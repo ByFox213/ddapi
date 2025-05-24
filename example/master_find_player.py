@@ -3,7 +3,7 @@ import asyncio
 from ddapi import DDnetApi, Master
 
 
-async def main():
+async def main() -> None:
     async with DDnetApi() as obj:
         master: Master = await obj.master()
 

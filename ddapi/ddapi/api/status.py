@@ -1,7 +1,7 @@
 from urllib.parse import quote
 
-from .._api import API
-from ..scheme import (
+from ddapi._api import API
+from ddapi.scheme import (
     Info,
     BannedMaster,
     List,
@@ -90,11 +90,11 @@ class Status(API):
 
     async def server_history(self, ip: str, port: int | str) -> None:
         # TODO: https://api.status.tw/server/{ip}/{port}/history
-        raise NotImplementedError()
+        raise NotImplementedError
 
     async def server_stats(self, ip: str, port: int | str) -> None:
         # TODO: https://api.status.tw/server/{ip}/{port}/stats
-        raise NotImplementedError()
+        raise NotImplementedError
 
     async def clan_list(self) -> ListPl:
         return await self._generate_model_instance(
@@ -118,7 +118,7 @@ class Status(API):
 
     async def player_history(self, name: str) -> None:
         # TODO:  https://api.status.tw/player/name/{name}/history
-        raise NotImplementedError()
+        raise NotImplementedError
 
     async def stats(self) -> Stats:
         return await self._generate_model_instance(
@@ -127,8 +127,8 @@ class Status(API):
 
     async def stats_players(self, t: str) -> None:
         # TODO: https://api.status.tw/stats/players/day | week | month
-        raise NotImplementedError()
+        raise NotImplementedError
 
     async def stats_servers(self, t: str) -> None:
         # TODO:  https://api.status.tw/stats/servers/week | month
-        raise NotImplementedError()
+        raise NotImplementedError

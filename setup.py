@@ -1,11 +1,13 @@
+from pathlib import Path
+
 import setuptools
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with Path.open(Path("README.md"), encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="ddapi",
-    version="0.13.1",
+    version="0.14.0",
     author="ByFox",
     description="DDnet api",
     long_description=long_description,

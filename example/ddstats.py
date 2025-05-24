@@ -3,7 +3,7 @@ import asyncio
 from ddapi import DDstats
 
 
-async def main():
+async def main() -> None:
     async with DDstats() as obj:
         user = await obj.player("ByFox")
     if user is not None:

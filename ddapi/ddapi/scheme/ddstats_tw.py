@@ -1,6 +1,7 @@
 # ddstats.tw
 from datetime import datetime
 from typing import Optional
+from urllib.parse import quote
 
 from pydantic import BaseModel, Field
 
@@ -11,19 +12,19 @@ class PData(BaseModel):
 
 
 class PPoints(BaseModel):
-    Novice: Optional[PData] = None
-    Moderate: Optional[PData] = None
-    Brutal: Optional[PData] = None
-    Insane: Optional[PData] = None
-    Dummy: Optional[PData] = None
-    DDmaX_Easy: Optional[PData] = Field(default=None, validation_alias="DDmaX.Easy")
-    DDmaX_Next: Optional[PData] = Field(default=None, validation_alias="DDmaX.Next")
-    DDmaX_Nut: Optional[PData] = Field(default=None, validation_alias="DDmaX.Nut")
-    DDmaX_Pro: Optional[PData] = Field(default=None, validation_alias="DDmaX.Pro")
-    Oldschool: Optional[PData] = None
-    Race: Optional[PData] = None
-    Solo: Optional[PData] = None
-    total: Optional[PData] = None
+    Novice: PData | None = None
+    Moderate: PData | None = None
+    Brutal: PData | None = None
+    Insane: PData | None = None
+    Dummy: PData | None = None
+    DDmaX_Easy: PData | None = Field(default=None, validation_alias="DDmaX.Easy")
+    DDmaX_Next: PData | None = Field(default=None, validation_alias="DDmaX.Next")
+    DDmaX_Nut: PData | None = Field(default=None, validation_alias="DDmaX.Nut")
+    DDmaX_Pro: PData | None = Field(default=None, validation_alias="DDmaX.Pro")
+    Oldschool: PData | None = None
+    Race: PData | None = None
+    Solo: PData | None = None
+    total: PData | None = None
 
 
 class PointG(BaseModel):
@@ -36,15 +37,26 @@ class PointG(BaseModel):
 class Profile(BaseModel):
     name: str
     points: int
-    clan: Optional[str]
-    country: Optional[int]
-    skin_name: Optional[str]
-    skin_color_body: Optional[int] = None
-    skin_color_feet: Optional[int] = None
+    clan: str | None
+    country: int | None
+    skin_name: str | None
+    skin_color_body: int | None = None
+    skin_color_feet: int | None = None
 
 
 class DProfile(BaseModel):
     profile: Profile
+
+    def url(self) -> str:
+        return f"https://ddstats.tw/player/{quote(self.name)}"
+
+    @staticmethod
+    def url_with_name(player: str) -> str:
+        return f"https://ddstats.tw/player/{quote(player)}"
+
+    @staticmethod
+    def api(player: str) -> str:
+        return f"https://ddstats.tw/profile/json?player={quote(player)}"
 
 
 class DDMap(BaseModel):
@@ -53,7 +65,7 @@ class DDMap(BaseModel):
     points: int
     stars: int
     mapper: str
-    timestamp: Optional[datetime] = None
+    timestamp: datetime | None = None
 
 
 class RecentFinishes(BaseModel):
@@ -97,24 +109,24 @@ class Finishes(BaseModel):
     map: DDMap
     name: str
     time: float
-    timestamp: Optional[datetime]
+    timestamp: datetime | None
     server: str
     rank: int
-    team_rank: Optional[int] = None
-    seconds_played: Optional[int] = None
+    team_rank: int | None = None
+    seconds_played: int | None = None
 
 
 class UnfinishedMap(BaseModel):
     map: DDMap
     finishes: int
-    finishes_rank: Optional[int] = None
-    median_time: Optional[float] = None
+    finishes_rank: int | None = None
+    median_time: float | None = None
 
 
 class Points(BaseModel):
-    weekly_points: Optional[PData] = None
-    monthly_points: Optional[PData] = None
-    yearly_points: Optional[PData] = None
+    weekly_points: PData | None = None
+    monthly_points: PData | None = None
+    yearly_points: PData | None = None
     points: PPoints
     rank_points: PPoints
     team_points: PPoints
@@ -132,9 +144,9 @@ class RecentPlayerInfo(BaseModel):
     name: str
     clan: str
     country: int
-    skin_name: Optional[str] = None
-    skin_color_body: Optional[int] = None
-    skin_color_feet: Optional[int] = None
+    skin_name: str | None = None
+    skin_color_body: int | None = None
+    skin_color_feet: int | None = None
     last_seen: str
     seconds_played: int
 
@@ -142,7 +154,7 @@ class RecentPlayerInfo(BaseModel):
 class MostPlayedMaps(BaseModel):
     map_name: str
     seconds_played: int
-    map: Optional[DDMap] = None
+    map: DDMap | None = None
 
 
 class MostPlayed(BaseModel):
@@ -175,7 +187,7 @@ class RecentTop10s(BaseModel):
     map: str
     time: float
     rank: int
-    timestamp: Optional[datetime] = None
+    timestamp: datetime | None = None
     server: str
 
 
@@ -188,27 +200,42 @@ class GeneralActivity(BaseModel):
 class Player(BaseModel):
     points_graph: list[PointG]
     recent_finishes: list[RecentFinishes]
-    favourite_teammates: Optional[list[FavouriteTeammates]] = None
+    favourite_teammates: list[FavouriteTeammates] | None = None
     profile: Profile
     is_mapper: bool
     finishes: list[Finishes]
-    unfinished_maps: Optional[list[UnfinishedMap]] = None
+    unfinished_maps: list[UnfinishedMap] | None = None
     points: Points
-    recent_activity: Optional[list[RecentActivity]] = None
-    recent_player_info: Optional[list[RecentPlayerInfo]] = None
-    most_played_maps: Optional[list[MostPlayedMaps]] = None
-    most_played_gametypes: Optional[list[MostPlayed]] = None
-    most_played_categories: Optional[list[MostPlayed]] = None
-    most_played_locations: Optional[list[MostPlayed]] = None
+    recent_activity: list[RecentActivity] | None = None
+    recent_player_info: list[RecentPlayerInfo] | None = None
+    most_played_maps: list[MostPlayedMaps] | None = None
+    most_played_gametypes: list[MostPlayed] | None = None
+    most_played_categories: list[MostPlayed] | None = None
+    most_played_locations: list[MostPlayed] | None = None
     playtime_per_month: list[PlaytimePerMonth]
-    general_activity: Optional[GeneralActivity] = None
-    favourite_rank1s_teammates: Optional[list[FavouriteRank1sTeammates]] = None
-    all_top_10s: Optional[list[AllTop10s]] = None
-    recent_top_10s: Optional[list[RecentTop10s]] = None
+    general_activity: GeneralActivity | None = None
+    favourite_rank1s_teammates: list[FavouriteRank1sTeammates] | None = None
+    all_top_10s: list[AllTop10s] | None = None
+    recent_top_10s: list[RecentTop10s] | None = None
+
+    def url(self) -> str:
+        return f"https://ddstats.tw/player/{quote(self.profile.name)}"
+
+    @staticmethod
+    def url_with_name(player: str) -> str:
+        return f"https://ddstats.tw/player/{quote(player)}"
+
+    @staticmethod
+    def api(player: str) -> str:
+        return f"https://ddstats.tw/player/json?player={quote(player)}"
 
 
 class Maps(BaseModel):
     maps: list[DDMap]
+
+    @staticmethod
+    def api() -> str:
+        return f"https://ddstats.tw/maps/json"
 
 
 class InfoSMap(BaseModel):
@@ -220,7 +247,7 @@ class InfoSMap(BaseModel):
 
 class RankingSMap(BaseModel):
     rank: int
-    timestamp: Optional[datetime] = None
+    timestamp: datetime | None = None
     name: str
     time: float
     map: str
@@ -229,7 +256,7 @@ class RankingSMap(BaseModel):
 
 class TeamRankingSMap(BaseModel):
     rank: int
-    timestamp: Optional[datetime] = None
+    timestamp: datetime | None = None
     id: list[int]
     players: list[str]
     time: float
@@ -278,3 +305,14 @@ class SMap(BaseModel):
     team_rankings: list[TeamRankingSMap]
     time_cps: list[TimeCpsSMap]
     playtime: list[PlaytimeSMap]
+
+    def url(self) -> str:
+        return f"https://ddstats.tw/map/{quote(self.info.map.map)}"
+
+    @staticmethod
+    def url_with_name(map_name: str) -> str:
+        return f"https://ddstats.tw/map/{quote(map_name)}"
+
+    @staticmethod
+    def api(map_name: str) -> str:
+        return f"https://ddstats.tw/map/json?map={quote(map_name)}"

@@ -3,7 +3,7 @@ import asyncio
 from ddapi import DDnetApi, DMap
 
 
-async def main():
+async def main() -> None:
     async with DDnetApi() as obj:
         dd_map: DMap = await obj.map("Just Fly 1")
     if dd_map is not None:

@@ -3,7 +3,7 @@ import asyncio
 from ddapi import DDnetApi, DDPlayer
 
 
-async def main():
+async def main() -> None:
     async with DDnetApi() as obj:
         user: DDPlayer = await obj.player("Cor")
     if user is not None:

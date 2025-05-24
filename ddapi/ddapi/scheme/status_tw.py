@@ -56,9 +56,9 @@ class ServerTw(BaseModel):
     client_score_kind: str | None = Field(alias="clientScoreKind")
     logo_url: str = Field(alias="logoUrl")
     map: DataTw
-    website: Optional[str] = None
-    discord_invite: Optional[str] = Field(None, alias="discordInvite")
-    description: Optional[str] = None
+    website: str | None = None
+    discord_invite: str | None = Field(None, alias="discordInvite")
+    description: str | None = None
     game_type: DataTw = Field(alias="gameType")
     version: VersionTw
     clients: list[ClientTw]

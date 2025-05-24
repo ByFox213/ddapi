@@ -3,7 +3,7 @@ import asyncio
 from ddapi import DDnetApi
 
 
-async def main():
+async def main() -> None:
     async with DDnetApi() as obj:
         status = await obj.status()
     if status is not None:

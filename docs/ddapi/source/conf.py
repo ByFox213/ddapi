@@ -2,7 +2,7 @@
 
 
 project = "ddapi"
-copyright = "2024, ByFox"
+copyright = "2024, ByFox"  # noqa: A001
 author = "ByFox"
 release = "3.2"
 

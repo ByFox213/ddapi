@@ -1,26 +1,29 @@
 import asyncio
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Generic
+
+from ddapi.types import T
 
 
-class CacheABC(ABC):
-    def __init__(self):
+class CacheABC(ABC, Generic[T]):
+    def __init__(self) -> None:
         self._cache = {}
         self._lock = asyncio.Lock()
+        self._remove_tasks: dict[str, asyncio.Task] = {}
 
     @abstractmethod
-    async def get(self, key: str, default: Any = None) -> Any:
+    async def get(self, key: str, default: T = None) -> T:
         return default
 
     @abstractmethod
-    async def set(self, key: str, value: Any, timeout_seconds: int = None) -> bool:
+    async def set(self, key: str, value: T, delay: int | None = None) -> bool:
         return True
 
     @abstractmethod
     def delete(self, key: str) -> bool:
         return True
 
-    async def get_or_set(self, key: str, value: Any = None) -> Any:
+    async def get_or_set(self, key: str, value: T = None) -> T:
         result = await self.get(key)
         if result is not None:
             return result

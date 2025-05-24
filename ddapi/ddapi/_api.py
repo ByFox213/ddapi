@@ -1,8 +1,9 @@
 import asyncio
 import atexit
 import logging
-from abc import ABC
-from typing import Optional, Type, Any
+from http import HTTPStatus
+from json import JSONDecoder
+from typing import Optional
 
 import aiohttp
 from aiohttp import ClientSession
@@ -20,54 +21,51 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class API(ABC):
+class API:
     def __init__(
         self,
         session: ClientSession = None,
         *,
         autoclose: bool = True,
-        cache: CacheABC = EmptyCache(),
-        json_loads: Any = DEFAULT_JSON_DECODER,
-    ):
+        cache: CacheABC = None,
+        json_loads: JSONDecoder = DEFAULT_JSON_DECODER,
+    ) -> None:
         self.__session = session
-        self.cache = cache
+        self.cache = cache or EmptyCache()
         self.json_loads = json_loads
         self.autoclose = autoclose
 
         if self.__session is None:
             self.__session = aiohttp.ClientSession()
-            logger.debug("Created a new aiohttp ClientSession.")
 
         atexit.register(self.close_api)
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> "API":
         if self.__session is None:
             self.__session = aiohttp.ClientSession()
-            logger.debug("Created a new aiohttp ClientSession on enter.")
         return self
 
-    async def __aexit__(self, _exc_type, _exc_val, _exc_tb):
+    async def __aexit__(self, _exc_type, _exc_val, _exc_tb) -> None:  # noqa: ANN001
         if self.autoclose:
-            logger.debug("Closing aiohttp ClientSession on exit.")
             await self.close()
 
-    async def _get(self, url: str) -> Optional[dict]:
+    async def _get(self, url: str) -> dict | None:
         """Send a GET request to the given URL and return the response as JSON."""
-        logger.debug(f"Sending GET request to {url}.")
+        logger.debug("Sending GET request to %s.", url)
         async with self.__session.get(url) as req:
-            if req.status == 200:
-                logger.debug(f"Received response from {url}: {req.status}.")
+            if req.status == HTTPStatus.OK.value:
+                logger.debug("Received response from %s: %s.", url, req.status)
                 return await req.json(loads=self.json_loads)
-            logger.error(f"Failed to get response from {url}: {req.status}.")
+            logger.error("Failed to get response from %s: %s.", url, req.status)
             return None
 
     async def _generate_model_instance(
         self,
         url: str,
-        model: Type[T],
-        k: Optional[str] = None,
+        model: type[T],
+        k: str | None = None,
         cache_timeout: int = 300,
-    ) -> Optional[T]:
+    ) -> T | None:
         """Generate a model instance from the given URL and optional keyword arguments.
 
         Args:
@@ -84,7 +82,7 @@ class API(ABC):
 
         dat = await self._get(url)
         if dat is None or not dat:
-            logger.warning(f"No data received from {url}.")
+            logger.warning("No data received from %s.", url)
             return None
 
         data = model(**{k: dat} if k is not None else dat)
@@ -98,7 +96,6 @@ class API(ABC):
     async def close(self) -> None:
         """Close the aiohttp session."""
         if self.__session is not None:
-            logger.debug("Closing aiohttp ClientSession.")
             await self.__session.close()
         self.__session = None
         self.cache = None
@@ -111,5 +108,5 @@ class API(ABC):
     def powered() -> None:
         return None
 
-    def close_api(self):
+    def close_api(self) -> None:
         asyncio.run(self.close())
