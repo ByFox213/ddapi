@@ -6,6 +6,6 @@ from .cache import CacheABC, EmptyCache, MemoryCache
 from .util import slugify2
 from .scheme import *  # noqa: F403
 
-__version__ = "0.14.1"
+__version__ = "0.14.2"
 __author__ = "ByFox"
 __LICENSE__ = "MIT"

@@ -5,7 +5,7 @@ from urllib.parse import quote
 
 from pydantic import BaseModel, Field
 
-from ddapi import slugify2
+from ddapi.util import slugify2
 from ddapi.enum import MasterEnum
 
 rm_list = ["DD-Persian", "/vDQMHSss8W", ""]
