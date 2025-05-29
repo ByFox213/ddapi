@@ -13,6 +13,7 @@ from ddapi.scheme.ddnet import (
     ReleasesMaps,
     QueryMapper,
     DDStatus,
+    DDSkins,
 )
 
 start_tests()
@@ -52,6 +53,11 @@ class DDnetTests(IsolatedAsyncioTestCase):
         """Test player query returns Query instance."""
         result = await self.obj.query("ByFox")
         assert isinstance(result, Query), f"Expected Query, got {type(result).__name__}"
+
+    async def test_skins(self) -> None:
+        """Test player query returns Query instance."""
+        result = await self.obj.skins()
+        assert isinstance(result, DDSkins), f"Expected Query, got {type(result).__name__}"
 
     async def test_query_map(self) -> None:
         """Test map query returns QueryMap instance."""

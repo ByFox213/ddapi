@@ -8,6 +8,7 @@ from ddapi.scheme import (
     QueryMapper,
     Master,
     DMap,
+    DDSkins,
 )
 
 __all__ = ("DDnetApi",)
@@ -30,6 +31,9 @@ class DDnetApi(API):
 
     async def status(self) -> DDStatus:
         return await self._generate_model_instance(DDStatus.api(), DDStatus)
+
+    async def skins(self) -> DDSkins:
+        return await self._generate_model_instance(DDSkins.api(), DDSkins)
 
     async def releases_map(self) -> ReleasesMaps:
         return await self._generate_model_instance(

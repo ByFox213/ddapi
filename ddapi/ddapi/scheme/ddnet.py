@@ -11,6 +11,31 @@ from ddapi.enum import MasterEnum
 rm_list = ["DD-Persian", "/vDQMHSss8W", ""]
 
 
+class DDSkinHD(BaseModel):
+    uhd: bool
+
+
+class DDSkin(BaseModel):
+    name: str
+    type: str
+    hd: DDSkinHD
+    creator: str
+    license: str
+    bodypart: str
+    gameversion: str
+    date: datetime
+    skinpack: str
+    imgtype: str
+
+
+class DDSkins(BaseModel):
+    skins: list[DDSkin]
+
+    @staticmethod
+    def api() -> str:
+        return "https://skins.ddnet.org/skin/skins.json"
+
+
 class DRank(BaseModel):
     points: int | None = None
     rank: int | None = None
