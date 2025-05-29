@@ -30,6 +30,7 @@ class DDSkin(BaseModel):
 
 class DDSkins(BaseModel):
     skins: list[DDSkin]
+    version: str
 
     @staticmethod
     def api() -> str:
